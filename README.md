@@ -5,12 +5,10 @@ Pyamaha is Python implementation of [Yamaha Extended Control API Specification](
 
 ## Status
 <table>
-<th>
-<td>Function</td>
-<td>API</td>
-<td>CLI</td>
-<td>Info</td>
-</th>
+<th>Function</th>
+<th>API</th>
+<th>CLI</th>
+<th>Info</th>
 <tr>
 <td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
 <td>Implemented</td>
