@@ -2,6 +2,48 @@
 
 ## About
 Pyamaha is Python implementation of [Yamaha Extended Control API Specification](https://github.com/rsc-dev/pyamaha/blob/master/doc/YXC_API_Spec_Basic.pdf).
+Please see Status for list of implemented functions.
+Undocumented functions will be added in future.
+
+## Instalation
+```sh
+pip install pyamaha
+```
+or
+```sh
+python setup.py install
+```
+
+## Usage
+### API
+```python
+from pyamaha import Device, System
+
+dev = Device('192.168.1.1')
+res = dev.request(System.get_device_info())
+
+print res.json() # JSON response
+```
+
+### CLI
+```sh
+> python -m pyamaha
+yxc>device 192.168.1.106
+yxc>system
+yxc\system>getDeviceInfo
+{u'api_version': 1.17,
+ u'destination': u'BG',
+ u'device_id': u'XXX',
+ u'model_name': u'CD-NT670D',
+ u'netmodule_checksum': u'XXX',
+ u'netmodule_version': u'1130    ',
+ u'operation_mode': u'normal',
+ u'response_code': 0,
+ u'system_id': u'XXX',
+ u'system_version': 1.7,
+ u'update_error_code': u'FFFFFFFF'}
+yxc\system>
+```
 
 ## Status
 <table>
@@ -262,10 +304,6 @@ Pyamaha is Python implementation of [Yamaha Extended Control API Specification](
 <td>Documented</td>
 </tr>
 </table>
-
-## Instalation
-
-## Usage
 
 ## License
 Code is released under [MIT license](https://github.com/rsc-dev/pyamaha/blob/master/LICENSE) © [Radoslaw '[rsc]' Matusiak](https://rm2084.blogspot.com/).
