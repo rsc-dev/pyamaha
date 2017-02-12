@@ -9,13 +9,13 @@ Pyamaha is Python implementation of [Yamaha Extended Control API Specification](
 <th>API</th>
 <th>CLI</th>
 <th>Info</th>
+<tr><td colspan="4">SYSTEM</td></tr>
 <tr>
 <td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
 <td>x</td>
 <td>-</td>
 <td>Documented</td>
 </tr>
-<tr><td colspan="4">SYSTEM</td></tr>
 <tr>
 <td>/YamahaExtendedControl/v1/system/getFeatures</td>
 <td>x</td>
@@ -109,6 +109,55 @@ Pyamaha is Python implementation of [Yamaha Extended Control API Specification](
 <td>Documented</td>
 </tr>
 <tr><td colspan="4">TUNER</td></tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/getPresetInfo</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/getPlayInfo</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/setFreq</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/recallPreset</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/switchPreset</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/storePreset</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/tuner/setDabService</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr><td colspan="4">NETWORK/USB</td></tr>
+<tr>
+<td></td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
 </table>
 
 ## Instalation
