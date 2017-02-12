@@ -230,6 +230,37 @@ Pyamaha is Python implementation of [Yamaha Extended Control API Specification](
 <td>-</td>
 <td>Documented</td>
 </tr>
+<tr><td colspan="4">CD</td></tr>
+<tr>
+<td>/YamahaExtendedControl/v1/cd/getPlayInfo</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/cd/setPlayback</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/cd/toggleTray</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/cd/toggleRepeat</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
+<tr>
+<td>/YamahaExtendedControl/v1/cd/toggleShuffle</td>
+<td>x</td>
+<td>-</td>
+<td>Documented</td>
+</tr>
 </table>
 
 ## Instalation
