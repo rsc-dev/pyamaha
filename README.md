@@ -47,54 +47,91 @@ yxc\system>
 
 ## Status
 <table>
-<th>Function</th>
-<th>API</th>
-<th>CLI</th>
-<th>Info</th>
-<tr><td colspan="4">SYSTEM</td></tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getFeatures</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/setAutoPowerStandby</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getLocationInfo</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/sendIrCode
-</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
+    <th>Function</th>
+    <th>API</th>
+    <th>CLI</th>
+    <th>Info</th>
+    <tr>
+        <td colspan="4">SYSTEM</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getFeatures</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setAutoPowerStandby</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getLocationInfo</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/sendIrCode</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWiredLan</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWirelessLan</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWirelessDirect</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setIpSettings</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setNetworkName</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr> 
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setAirPlayPin</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>     
 <tr><td colspan="4">ZONE</td></tr>
 <tr>
 <td>/YamahaExtendedControl/v1/{zone}/getStatus</td>

@@ -23,6 +23,9 @@ TYPE = ['select', 'play', 'return']
 POWER = ['on', 'standby', 'toggle']
 LIST_ID = ['main', 'auto_complete', 'search_artist', 'search_track']
 LANG = ['en', 'ja', 'fr', 'de', 'es', 'ru', 'it', 'zh']
+WIFI = ['none', 'wep', 'wpa2-psk(aes)', 'mixed_mode']
+WIFI_DIRECT = ['none', 'wpa2-psk(aes)']
+
 
 RESPONSE_CODE = {
     0: 'Successful request',
@@ -63,7 +66,14 @@ class Device():
         self.ip = ip
     # end-of-method __init__
     
-    def request(self, uri):
+    def request(self, *args):
+        if len(args) == 1:
+            return self.get(args)
+        elif len(args) == 2:
+            return self.post(*args)
+    # end-of-method request
+    
+    def get(self, uri):
         """Request given URI. Returns response object.
         
         Arguments:
@@ -71,7 +81,12 @@ class Device():
         """
         r = requests.get(uri.format(host=self.ip))
         return r
-    # end-of-mthod request
+    # end-of-method request    
+    
+    def post(self, uri, data):
+        r = requests.post(uri, data=data)
+        return r
+    # end-of-method post    
     
     pass
 # end-of-class Device    
@@ -87,7 +102,14 @@ class System():
         'GET_FUNC_STATUS': 'http://{host}/YamahaExtendedControl/v1/system/getFuncStatus',
         'SET_AUTOPOWER_STANDBY': 'http://{host}/YamahaExtendedControl/v1/system/setAutoPowerStandby?enable={enable}',
         'GET_LOCATION_INFO': 'http://{host}/YamahaExtendedControl/v1/system/getLocationInfo',
-        'SEND_IR_CODE': 'http://{host}/YamahaExtendedControl/v1/system/sendIrCode?code={code}'
+        'SEND_IR_CODE': 'http://{host}/YamahaExtendedControl/v1/system/sendIrCode?code={code}',
+        'SET_WIRED_LAN': 'http://{host}/YamahaExtendedControl/v1/system/setWiredLan',
+        'SET_WIRELESS_LAN': 'http://{host}/YamahaExtendedControl/v1/system/setWirelessLan',
+        'SET_WIRELESS_DIRECT': 'http://{host}/YamahaExtendedControl/v1/system/setWirelessDirect',
+        'SET_IP_SETTINGS': 'http://{host}/YamahaExtendedControl/v1/system/setIpSettings',
+        'SET_NETWORK_NAME': 'http://{host}/YamahaExtendedControl/v1/system/setNetworkName',
+        'SET_AIRPLAY_PIN': 'http://{host}/YamahaExtendedControl/v1/system/setAirPlayPin',
+        'GET_MAC_ADDRESS_FILTER': 'http://{host}/YamahaExtendedControl/v1/system/getMacAddressFilter'
     }
 
     @staticmethod
@@ -143,6 +165,143 @@ class System():
         return System.URI['SEND_IR_CODE'].format(host='{host}', code=code)
     # end-of-method
 
+    @staticmethod
+    def set_wired_lan(dhcp=None, ip_address=None, subnet_mask=None, default_gateway=None, dns_server_1=None, dns_server_2=None):
+        """For setting Wired Network. Network connection is switched to wired by using this API. If no
+        parameter is specified, current parameter is used. If set parameter is incomplete, it is possible not
+        to provide network avalability.
+        """
+        data = {}
+        
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+           
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+        
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2
+        
+        return System.URI['SET_WIRED_LAN'].format(host='{host}'), data
+        pass
+    # end-of-method set_wired_lan
+    
+    @staticmethod
+    def set_wireless_lan(ssid=None, type=None, key=None, dhcp=None, ip_address=None, 
+                         subnet_mask=None, default_gateway=None, dns_server_1=None, dns_server_2=None):
+        """For setting Wireless Network (Wi-Fi). Network connection is switched to wireless (Wi-Fi) by using
+        this API. If no parameter is specified, current parameter is used. If set parameter is incomplete, it
+        is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if ssid is not None:
+            data['ssid'] = ssid
+            
+        if type is not None:
+            assert type in WIFI, 'Invalid TYPE value!'
+            data['type'] = type
+           
+        if key is not None:
+            data['key'] = key
+            
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+        
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2    
+        
+        return System.URI['SET_WIRELESS_LAN'].format(host='{host}'), data
+    # end-of-method set_wireless_lan
+    
+    @staticmethod
+    def set_wireless_direct(type=None, key=None):
+        """For setting Wireless Network (Wireless Direct). Network connection is switched to wireless
+        (Wireless Direct) by using this API. If no parameter is specified, current parameter is used. If set
+        parameter is incomplete, it is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if type is not None:
+            assert type in WIFI_DIRECT, 'Invalid TYPE value!'
+            data['type'] = type
+            
+        if key is not None:
+            data['key'] = key
+            
+        return System.URI['SET_WIRELESS_DIRECT'].format(host='{host}'), data
+    # end-of-method set_wireless_direct
+    
+    @staticmethod
+    def set_ip_settings(dhcp, ip_address, subnet_mask, default_gateway, dns_server_1, dns_server_2):
+        """For setting IP. This API only set IP as maintain same network connection status (Wired/Wireless
+        Lan/Wireless Direct/Extend). If no parameter is specified, current parameter is used. If set
+        parameter is incomplete, it is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+           
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+        
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2
+        
+        return System.URI['SET_WIRED_LAN'].format(host='{host}'), data
+    # end-of-method set_ip_settings
+    
+    @staticmethod
+    def set_network_name(name):
+        """For setting Network Name (Friendly Name)"""
+        return System.URI['SET_NETWORK_NAME'].format(host='{host}'), {'name': name}
+    # end-of-method set_network_name
+    
+    @staticmethod
+    def set_airplay_pin(pin):
+        """For setting AirPlay PIN. This is valid only when “airplay” exists in “func_list” found in
+        /system/getFuncStatus.
+        """
+        return System.URI['SET_AIRPLAY_PIN'].format(host='{host}'), {'pin': pin}
+    # end-of-method set_airplay_pin
+    
+    @staticmethod
+    def get_mac_address_filter():
+        """For retrieving setup of MAC Address Filter"""
+        return System.URI['GET_MAC_ADDRESS_FILTER']
+    # end-of-method get_mac_address_filter
+    
     pass
 # end-of-class System
 
