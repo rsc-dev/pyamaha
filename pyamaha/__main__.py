@@ -3,7 +3,7 @@
 __author__      = 'Radoslaw Matusiak'
 __copyright__   = 'Copyright (c) 2017 Radoslaw Matusiak'
 __license__     = 'MIT'
-__version__     = '0.1'
+__version__     = '0.2'
 
 import cmd
 import pprint
@@ -27,14 +27,29 @@ def device_decorator(func):
 
 class BaseCmds():
     def do_exit(self, _):
+        """
+        Exit.
+        
+        Usage: exit <enter>
+        """
         sys.exit(0)
     # end-of-method do_exit
     
     def do_back(self, _):
+        """
+        Exit submenu.
+        
+        Usage: back <enter>
+        """
         return True
     # end-of-method do_back
     
     def do_device(self, ip):
+        """
+        Set device IP.
+        
+        Usage: device <ip> <enter>
+        """
         global DEV
         ip = ip.strip()
         DEV = Device(ip)
@@ -54,46 +69,113 @@ class SystemCli(cmd.Cmd, BaseCmds):
     
     @device_decorator
     def do_getDeviceInfo(self, _):
+        """
+        For retrieving basic information of a Device.
+        
+        Usage: getDeviceInfo <enter>
+        """
         resp = DEV.request(System.get_device_info())
         pprint.pprint(resp.json())
     # end-of-method do_getDeviceInfo
     
     @device_decorator    
     def do_getFeatures(self, _):
+        """
+        For retrieving feature information equipped with a Device.
+        
+        Usage: getFeatures <enter>
+        """
         resp = DEV.request(System.get_features())
         pprint.pprint(resp.json())
     # end-of-method getFeatures    
     
     @device_decorator    
     def do_getNetworkStatus(self, _):
+        """
+        For retrieving network related setup/information.
+        
+        Usage: getNetworkStatus <enter>
+        """    
         resp = DEV.request(System.get_network_status())
         pprint.pprint(resp.json())
     # end-of-method getNetworkStatus    
     
     @device_decorator
     def do_getFuncStatus(self, _):
+        """
+        For retrieving setup/information of overall system function. 
+        Parameters are readable only when corresponding functions are available in "func_list" of /system/getFeatures.
+        
+        Usage: getFuncStatus <enter>
+        """    
         resp = DEV.request(System.get_network_status())
         pprint.pprint(resp.json())
     # end-of-method getFuncStatus    
     
     @device_decorator
-    def do_setAutoPowerStandby(self, _):
-        resp = DEV.request(System.set_autopower_standby())
+    def do_setAutoPowerStandby(self, enable):
+        """
+        For setting Auto Power Standby status. 
+        Actual operations/reactions of enabling Auto Power Standby depend on each Device.
+        
+        Usage: setAutoPowerStandby <true|false> <enter>
+        """
+        enable = True if enable == 'true' else False
+        resp = DEV.request(System.set_autopower_standby(enable))
         pprint.pprint(resp.json())
     # end-of-method setAutoPowerStandby    
     
     @device_decorator
     def do_getLocationInfo(self, _):
+        """
+        For retrieving Location information.
+        
+        Usage: getLocationInfo <enter>
+        """      
         resp = DEV.request(System.get_location_info())
         pprint.pprint(resp.json())
     # end-of-method getLocationInfo    
     
     @device_decorator
     def do_sendIrCode(self, code):
+        """
+        For sending specific remote IR code. 
+        A Device is operated same as remote IR code reception. But continuous IR code cannot be used in this command. 
+        Refer to each Device's IR code list for details..
+        
+        Usage: sendIrCode <code> <enter>
+        """      
         code = code.strip()
         resp = DEV.request(System.send_ir_code(code))
         pprint.pprint(resp.json())
     # end-of-method sendIrCode     
+    
+    @device_decorator
+    def do_setWiredLan(self, line):
+        """
+        For setting Wired Network. Network connection is switched to wired by using this API. If no
+        parameter is specified, current parameter is used. If set parameter is incomplete, it is possible not
+        to provide network avalability.
+        
+        Usage: setWiredLan [dhcp=<true|false>] [ip_address=] [subnet_mask=] [default_gateway=] [dns_server_1=] [dns_server_2=] <enter>
+        Example: setWiredLan dhcp=false dns_server_2=8.8.4.4 <enter>
+        """
+        data = {'dhcp':None, 'ip_address':None, 'subnet_mask':None, 'default_gateway':None, 'dns_server_1':None, 'dns_server_2':None}
+        
+        args = line.split()
+        for arg in args:
+            k, v = arg.split('=')
+            if k in data.keys():
+                data[k] = v
+        
+        resp = DEV.request(System.set_wired_lan(**data))
+        pprint.pprint(resp.json())
+    # end-of-method do_setWiredLan           
+    
+    @device_decorator
+    def do_setWirelessLan(self, line):
+        pass
+    # end-of-method do_setWirelessLan
     
     pass
 # end-of-class System    
@@ -107,20 +189,22 @@ class RootCli(cmd.Cmd, BaseCmds):
         self.prompt = '{}>'.format(RootCli.PROMPT)
     # end-of-method __init__
     
-    def do_discover(self, _):
-        raise NotImplementedError()
-    # end-of-method do_discover    
-    
-    def do_show(self, _):
-        raise NotImplementedError()
-    # end-of-method do_show
-    
     def do_system(self, _):
+        """
+        System submenu.
+        
+        Usage: system <enter>
+        """
         system = SystemCli(RootCli.PROMPT)
         system.cmdloop()
     # end-of-method do_system
     
     def do_back(self, _):
+        """
+        Nothing.
+        
+        Usage: back <enter>
+        """
         pass
     # end-of-method do_back
     
