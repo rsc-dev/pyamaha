@@ -767,7 +767,7 @@ class Zone():
     
     @staticmethod
     def set_balance(zone, value):
-        """For setting L/R Balance in each Zone’s speaker. Values of specifying range and steps are different.
+        """For setting L/R Balance in each Zone's speaker. Values of specifying range and steps are different.
         
         Arguments:
             zone -- Specifies target Zone.
