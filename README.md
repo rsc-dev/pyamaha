@@ -1,5 +1,7 @@
 # PYAMAHA
 
+[![Join the chat at https://gitter.im/rsc-dev/pyamaha](https://badges.gitter.im/rsc-dev/pyamaha.svg)](https://gitter.im/rsc-dev/pyamaha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## About
 Pyamaha is Python implementation of [Yamaha Extended Control API Specification](https://github.com/rsc-dev/pyamaha/blob/master/doc/YXC_API_Spec_Basic.pdf).
 Please see Status for list of implemented functions.
