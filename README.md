@@ -49,109 +49,340 @@ yxc\system>
 
 ## Status
 <table>
-<th>Function</th>
-<th>API</th>
-<th>CLI</th>
-<th>Info</th>
-<tr><td colspan="4">SYSTEM</td></tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getFeatures</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/setAutoPowerStandby</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/getLocationInfo</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/system/sendIrCode
-</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr><td colspan="4">ZONE</td></tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/getStatus</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/getSoundProgramList</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setPower</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setSleep</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setVolume</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setMute</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setInput</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>/YamahaExtendedControl/v1/{zone}/setSoundProgram</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
-<tr>
-<td>http://{host}/YamahaExtendedControl/v1/{zone}/prepareInputChange</td>
-<td>x</td>
-<td>-</td>
-<td>Documented</td>
-</tr>
+    <th>Function</th>
+    <th>API</th>
+    <th>CLI</th>
+    <th>Info</th>
+    <tr>
+        <td colspan="4">SYSTEM</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getDeviceInfo</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getFeatures</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getNetworkStatus</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getFuncStatus</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setAutoPowerStandby</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getLocationInfo</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/sendIrCode</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWiredLan</td>
+        <td>x</td>
+        <td>x</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWirelessLan</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setWirelessDirect</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setIpSettings</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setNetworkName</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr> 
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setAirPlayPin</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getMacAddressFilter</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>  
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setMacAddressFilter</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>     
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getNetworkStandby</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>   
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setNetworkStandby</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getBluetoothInfo</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>       
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setBluetoothStandby</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr> 
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setBluetoothTxSetting</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>     
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getBluetoothDeviceList</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/updateBluetoothDeviceList</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/connectBluetoothDevice</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/disconnectBluetoothDevice</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setSpeakerA</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setSpeakerB</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setDimmer</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setZoneBVolumeSync</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setHdmiOut1</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr> 
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setHdmiOut2</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/getNameText</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+        <tr>
+        <td>/YamahaExtendedControl/v1/system/setNameText</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td colspan="4">ZONE</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/getStatus</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/getSoundProgramList</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setPower</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setSleep</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setVolume</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setMute</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setInput</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setSoundProgram</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/prepareInputChange</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/set3dSurround</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setDirect</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setPureDirect</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setEnhancer</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setToneControl</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setEqualizer</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setBalance</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setDialogueLevel</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setDialogueLift</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setClearVoice</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>  
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setSubwooferVolume</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setBassExtension</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>      
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/getSignalInfo</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>    
 <tr><td colspan="4">TUNER</td></tr>
 <tr>
 <td>/YamahaExtendedControl/v1/tuner/getPresetInfo</td>

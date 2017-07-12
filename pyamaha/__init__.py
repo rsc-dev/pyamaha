@@ -3,8 +3,9 @@
 __author__      = 'Radoslaw Matusiak'
 __copyright__   = 'Copyright (c) 2017 Radoslaw Matusiak'
 __license__     = 'MIT'
-__version__     = '0.1'
+__version__     = '0.2'
 
+import json
 import logging
 import requests
 
@@ -23,6 +24,9 @@ TYPE = ['select', 'play', 'return']
 POWER = ['on', 'standby', 'toggle']
 LIST_ID = ['main', 'auto_complete', 'search_artist', 'search_track']
 LANG = ['en', 'ja', 'fr', 'de', 'es', 'ru', 'it', 'zh']
+WIFI = ['none', 'wep', 'wpa2-psk(aes)', 'mixed_mode']
+WIFI_DIRECT = ['none', 'wpa2-psk(aes)']
+STANDBY = ['off', 'on', 'auto']
 
 RESPONSE_CODE = {
     0: 'Successful request',
@@ -63,7 +67,14 @@ class Device():
         self.ip = ip
     # end-of-method __init__
     
-    def request(self, uri):
+    def request(self, *args):
+        if isinstance(args[0], str):
+            return self.get(args[0])
+        else:
+            return self.post(*(args[0]))
+    # end-of-method request
+    
+    def get(self, uri):
         """Request given URI. Returns response object.
         
         Arguments:
@@ -71,7 +82,12 @@ class Device():
         """
         r = requests.get(uri.format(host=self.ip))
         return r
-    # end-of-mthod request
+    # end-of-method request    
+    
+    def post(self, uri, data):
+        r = requests.post(uri.format(host=self.ip), data=json.dumps(data))
+        return r
+    # end-of-method post    
     
     pass
 # end-of-class Device    
@@ -87,7 +103,32 @@ class System():
         'GET_FUNC_STATUS': 'http://{host}/YamahaExtendedControl/v1/system/getFuncStatus',
         'SET_AUTOPOWER_STANDBY': 'http://{host}/YamahaExtendedControl/v1/system/setAutoPowerStandby?enable={enable}',
         'GET_LOCATION_INFO': 'http://{host}/YamahaExtendedControl/v1/system/getLocationInfo',
-        'SEND_IR_CODE': 'http://{host}/YamahaExtendedControl/v1/system/sendIrCode?code={code}'
+        'SEND_IR_CODE': 'http://{host}/YamahaExtendedControl/v1/system/sendIrCode?code={code}',
+        'SET_WIRED_LAN': 'http://{host}/YamahaExtendedControl/v1/system/setWiredLan',
+        'SET_WIRELESS_LAN': 'http://{host}/YamahaExtendedControl/v1/system/setWirelessLan',
+        'SET_WIRELESS_DIRECT': 'http://{host}/YamahaExtendedControl/v1/system/setWirelessDirect',
+        'SET_IP_SETTINGS': 'http://{host}/YamahaExtendedControl/v1/system/setIpSettings',
+        'SET_NETWORK_NAME': 'http://{host}/YamahaExtendedControl/v1/system/setNetworkName',
+        'SET_AIRPLAY_PIN': 'http://{host}/YamahaExtendedControl/v1/system/setAirPlayPin',
+        'GET_MAC_ADDRESS_FILTER': 'http://{host}/YamahaExtendedControl/v1/system/getMacAddressFilter',
+        'SET_MAC_ADDRESS_FILTER': 'http://{host}/YamahaExtendedControl/v1/system/setMacAddressFilter',
+        'GET_NETWORK_STANDBY': 'http://{host}/YamahaExtendedControl/v1/system/getNetworkStandby',
+        'SET_NETWORK_STANDBY': 'http://{host}/YamahaExtendedControl/v1/system/setNetworkStandby?standby={standby}',
+        'GET_BLUETOOTH_INFO': 'http://{host}/YamahaExtendedControl/v1/system/getBluetoothInfo',
+        'SET_BLUETOOTH_STANDBY': 'http://{host}/YamahaExtendedControl/v1/system/setBluetoothStandby?enable={enable}',
+        'SET_BLUETOOTH_TX_SETTING': 'http://{host}/YamahaExtendedControl/v1/system/setBluetoothTxSetting?enable={enable}',
+        'GET_BLUETOOTH_DEVICE_LIST': 'http://{host}/YamahaExtendedControl/v1/system/getBluetoothDeviceList',
+        'UPDATE_BLUETOOTH_DEVICE_LIST': 'http://{host}/YamahaExtendedControl/v1/system/updateBluetoothDeviceList',
+        'CONNECT_BLUETOOTH_DEVICE': 'http://{host}/YamahaExtendedControl/v1/system/connectBluetoothDevice?address={address}',
+        'DISCONNECT_BLUETOOTH_DEVICE': 'http://{host}/YamahaExtendedControl/v1/system/disconnectBluetoothDevice',
+        'SET_SPEAKER_A': 'http://{host}/YamahaExtendedControl/v1/system/setSpeakerA?enable={enable}',
+        'SET_SPEAKER_B': 'http://{host}/YamahaExtendedControl/v1/system/setSpeakerB?enable={enable}',
+        'SET_DIMMER': 'http://{host}/YamahaExtendedControl/v1/system/setDimmer?value={value}',
+        'SET_ZONE_B_VOLUME_SYNC': 'http://{host}/YamahaExtendedControl/v1/system/setZoneBVolumeSync?enable={enable}',
+        'SET_HDMI_OUT_1': 'http://{host}/YamahaExtendedControl/v1/system/setHdmiOut1?enable={enable}',
+        'SET_HDMI_OUT_2': 'http://{host}/YamahaExtendedControl/v1/system/setHdmiOut2?enable={enable}',
+        'GET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/getNameText?id={id}',
+        'SET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/setNameText'
     }
 
     @staticmethod
@@ -123,13 +164,16 @@ class System():
     def set_autopower_standby(enable=True):
         """For setting Auto Power Standby status. 
         Actual operations/reactions of enabling Auto Power Standby depend on each Device.
+        
+        Arguments:
+        enable -- Specifies Auto Power Standby status.
         """
         return System.URI['SET_AUTOPOWER_STANDBY'].format(host='{host}', enable=enable)
     # end-of-method
 
     @staticmethod
     def get_location_info():
-        """For retrieving Location information
+        """For retrieving Location information.
         """
         return System.URI['GET_LOCATION_INFO']
     # end-of-method
@@ -139,10 +183,321 @@ class System():
         """For sending specific remote IR code. 
         A Device is operated same as remote IR code reception. But continuous IR code cannot be used in this command. 
         Refer to each Device's IR code list for details..
+        
+        Arguments:
+        code -- Specifies IR code in 8-digit hex.
         """
         return System.URI['SEND_IR_CODE'].format(host='{host}', code=code)
     # end-of-method
 
+    @staticmethod
+    def set_wired_lan(dhcp=None, ip_address=None, subnet_mask=None, default_gateway=None, dns_server_1=None, dns_server_2=None):
+        """For setting Wired Network. Network connection is switched to wired by using this API. If no
+        parameter is specified, current parameter is used. If set parameter is incomplete, it is possible not
+        to provide network avalability.
+        
+        Arguments:
+        dhcp -- Specifies DHCP setting.
+        ip_address -- Specifies IP Address.
+        subnet_mask -- Specifies Subnet Mask.
+        default_gateway -- Specifies Default Gateway.
+        dns_server_1 -- Specifies DNS Server 1.
+        dns_server_2 -- Specifies DNS Server 2.
+        """
+        data = {}
+        
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+           
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+        
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2
+        
+        return System.URI['SET_WIRED_LAN'].format(host='{host}'), data
+    # end-of-method set_wired_lan
+    
+    @staticmethod
+    def set_wireless_lan(ssid=None, type=None, key=None, dhcp=None, ip_address=None, 
+                         subnet_mask=None, default_gateway=None, dns_server_1=None, dns_server_2=None):
+        """For setting Wireless Network (Wi-Fi). Network connection is switched to wireless (Wi-Fi) by using
+        this API. If no parameter is specified, current parameter is used. If set parameter is incomplete, it
+        is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if ssid is not None:
+            data['ssid'] = ssid
+            
+        if type is not None:
+            assert type in WIFI, 'Invalid TYPE value!'
+            data['type'] = type
+           
+        if key is not None:
+            data['key'] = key
+            
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+        
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2    
+        
+        return System.URI['SET_WIRELESS_LAN'].format(host='{host}'), data
+    # end-of-method set_wireless_lan
+    
+    @staticmethod
+    def set_wireless_direct(type=None, key=None):
+        """For setting Wireless Network (Wireless Direct). Network connection is switched to wireless
+        (Wireless Direct) by using this API. If no parameter is specified, current parameter is used. If set
+        parameter is incomplete, it is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if type is not None:
+            assert type in WIFI_DIRECT, 'Invalid TYPE value!'
+            data['type'] = type
+            
+        if key is not None:
+            data['key'] = key
+            
+        return System.URI['SET_WIRELESS_DIRECT'].format(host='{host}'), data
+    # end-of-method set_wireless_direct
+    
+    @staticmethod
+    def set_ip_settings(dhcp, ip_address, subnet_mask, default_gateway, dns_server_1, dns_server_2):
+        """For setting IP. This API only set IP as maintain same network connection status (Wired/Wireless
+        Lan/Wireless Direct/Extend). If no parameter is specified, current parameter is used. If set
+        parameter is incomplete, it is possible not to provide network avalability.
+        """
+        data = {}
+        
+        if dhcp is not None:
+            data['dhcp'] = dhcp
+            
+        if ip_address is not None:
+            data['ip_address'] = ip_address
+           
+        if subnet_mask is not None:
+            data['subnet_mask'] = subnet_mask
+            
+        if default_gateway is not None:
+            data['default_gateway'] = default_gateway
+            
+        if dns_server_1 is not None:
+            data['dns_server_1'] = dns_server_1
+        
+        if dns_server_2 is not None:
+            data['dns_server_2'] = dns_server_2
+        
+        return System.URI['SET_WIRED_LAN'].format(host='{host}'), data
+    # end-of-method set_ip_settings
+    
+    @staticmethod
+    def set_network_name(name):
+        """For setting Network Name (Friendly Name)"""
+        return System.URI['SET_NETWORK_NAME'].format(host='{host}'), {'name': name}
+    # end-of-method set_network_name
+    
+    @staticmethod
+    def set_airplay_pin(pin):
+        """For setting AirPlay PIN. This is valid only when "airplay" exists in "func_list" found in
+        /system/getFuncStatus.
+        """
+        return System.URI['SET_AIRPLAY_PIN'].format(host='{host}'), {'pin': pin}
+    # end-of-method set_airplay_pin
+    
+    @staticmethod
+    def get_mac_address_filter():
+        """For retrieving setup of MAC Address Filter"""
+        return System.URI['GET_MAC_ADDRESS_FILTER']
+    # end-of-method get_mac_address_filter
+    
+    @staticmethod
+    def set_mac_address_filter(filter, *macs):
+        """For setting MAC Address Filter"""
+        data = {}
+        data['filter'] = filter
+        
+        for i, address in enumerate(macs):
+            data['address_{}'.format(i+1)]
+            
+            if i >= 9:
+                break
+        
+        return System.URI['SET_MAC_ADDRESS_FILTER'].format(host='{host}'), data
+    # end-of-method set_mac_address_filter
+    
+    @staticmethod
+    def get_network_standby():
+        """For retrieving setup of Network Standby"""
+        return System.URI['GET_NETWORK_STANDBY']
+    # end-of-method get_network_standby
+    
+    @staticmethod
+    def set_network_standby(standby):
+        """For setting Network Standby"""
+        assert standby in STANDBY, 'Invalid STANDBY value!'
+        return System.URI['SET_NETWORK_STANDBY'].format(host='{host}', standby=standby)
+    # end-of-method set_network_standby
+    
+    @staticmethod
+    def get_bluetooth_info():
+        """For retrieving setup/information of Bluetooth. Parameters are readable only when corresponding
+        functions are available in "func_list" of /system/getFuncStatus. "bluetooth_device" parameter is
+        contained in "bluetooth_tx_setting".
+        """
+        return System.URI['GET_BLUETOOTH_INFO']
+    # end-of-method get_bluetooth_info
+    
+    @staticmethod
+    def set_bluetooth_standby(enable=True):
+        """For setting Bluetooth Standby"""
+        return System.URI['SET_BLUETOOTH_STANDBY'].format(host='{host}', enable=enable)
+    # end-of-method set_bluetooth_standby
+    
+    @staticmethod
+    def set_bluetooth_tx_setting(enable=True):
+        """For setting Bluetooth transmission"""
+        return System.URI['SET_BLUETOOTH_TX_SETTING'].format(host='{host}', enable=enable)
+    # end-of-method set_bluetooth_tx_setting
+
+    @staticmethod
+    def get_bluetooth_device_list():
+        """For retrieving Bluetooth (Sink) device list. This API is available only when "bluetooth_tx_setting"
+        is true under /system/getFuncStatus.
+        This device list information is in the cach. If update device list information, excute
+        /system/updateBluetoothDeviceList.
+        """
+        return System.URI['GET_BLUETOOTH_DEVICE_LIST']
+    # end-of-method get_bluetooth_device_list
+    
+    @staticmethod
+    def update_bluetooth_device_list():
+        """For updating Bluetooth (Sink) device list. This API is available only when "bluetooth_tx_setting"
+        is true under /system/getFuncStatus.
+        Retrieve update status and list information after finish updating via
+        /system/getBluetoothDeviceList.
+        """
+        return System.URI['UPDATE_BLUETOOTH_DEVICE_LIST']
+    # end-of-method update_bluetooth_device_list
+    
+    @staticmethod
+    def connect_bluetooth_device(address):
+        """For connecting Bluetooth (Sink) device. This API is available only when "bluetooth_tx_setting" is
+        true under /system/getFuncStatus.
+        It is possible to take time to return this API response issued after connection status is fixed.
+        """
+        return System.URI['CONNECT_BLUETOOTH_DEVICE'].format(host='{host}', address=address)
+    # end-of-method connect_bluetooth_device
+    
+    @staticmethod
+    def disconnect_bluetooth_device():
+        """For disconnecting Bluetooth (Sink) device. This API is available only when "bluetooth_tx_setting"
+        is true under /system/getFuncStatus.
+        This API response is issued immediately after disconnect request is accepted.
+        """
+        return System.URI['DISCONNECT_BLUETOOTH_DEVICE']
+    # end-of-method disconnect_bluetooth_device
+    
+    @staticmethod
+    def set_speaker_a(enable=True):
+        """For setting Speaker A status"""
+        return System.URI['SET_SPEAKER_A'].format(host='{host}', enable=enable)
+    # end-of-method set_speaker_a
+    
+    @staticmethod
+    def set_speaker_b(enable=True):
+        """For setting Speaker A status"""
+        return System.URI['SET_SPEAKER_B'].format(host='{host}', enable=enable)
+    # end-of-method set_speaker_b
+    
+    @staticmethod
+    def set_dimmer(value):
+        """For setting FL/LED Dimmer.
+        
+        Arguments:
+        value -- Setting Dimmer. Specifies -1 in case of auto setting.
+                 Specifies 0 or more than 0 in case of manual setting.
+                 Auto setting is available only when -1 is exists in vale range under
+                 /system/getFeatures.
+                 Value Range: calculated by minimum/maximum/step values gotten
+                 via /system/getFeatures
+        """
+        return System.URI['SET_DIMMER'].format(host='{host}', value=value)
+    # end-of-method set_dimmer
+    
+    @staticmethod
+    def set_zone_b_volume_sync(enable):
+        """For setting Zone B volume sync."""
+        return System.URI['SET_ZONE_B_VOLUME_SYNC'].format(host='{host}', enable=enable)
+    # end-of-method set_zone_b_volume_sync
+    
+    @staticmethod
+    def set_hdmi_out_1(enable):
+        """set_hdmi_out_1."""
+        return System.URI['SET_HDMI_OUT_1'].format(host='{host}', enable=enable)
+    # end-of-method set_hdmi_out_1
+    
+    @staticmethod
+    def set_hdmi_out_2(enable):
+        """set_hdmi_out_1."""
+        return System.URI['SET_HDMI_OUT_2'].format(host='{host}', enable=enable)
+    # end-of-method set_hdmi_out_2
+    
+    @staticmethod
+    def get_name_text(id):
+        """For retrieving text information of Zone, Input, Sound program. If they can be renamed, can
+        retrieve text information renamed.
+        
+        Arguments:
+        id -- Specifies ID. If no ID is specified, retrieve all information of
+              Zone, Input, Sound program. Refer to "All ID List" for details (documentation).
+        """
+        return System.URI['GET_NAME_TEXT'].format(host='{host}', id=id)
+    # end-of-method get_name_text
+    
+    @staticmethod
+    def set_name_text(id, text):
+        """For setting text information related to each ID of Zone, Input.
+        
+        Arguments:
+        id -- Specifies ID. Input ID can be specified only when
+              " rename_enable " is true under /system/getFeatures.
+              Sound Program ID can not be specified.
+              Note:
+              If "main" is specified, Network Name is overwritten with same
+              text information to be acceptable both MusicCast CONTROLLER
+              (Yamaha) and Spotify App. If Network Name is changed, "main"
+              text information is not changed.
+        text -- Specifies text information (UTF-8 within 64 bytes).
+                If "" (empty text) is specified, specifies default text information.  
+        """
+        data = {'id': id, 'text': text}
+        return System.URI['SET_NAME_TEXT'], data
+    # end-of-method set_name_text
+        
     pass
 # end-of-class System
 
@@ -160,6 +515,19 @@ class Zone():
         'SET_INPUT': 'http://{host}/YamahaExtendedControl/v1/{zone}/setInput?input={input}&mode={mode}',
         'SET_SOUND_PROGRAM': 'http://{host}/YamahaExtendedControl/v1/{zone}/setSoundProgram?program={program}',
         'PREPARE_INPUT_CHANGE': 'http://{host}/YamahaExtendedControl/v1/{zone}/prepareInputChange?input={input}',
+        'SET_3D_SURROUND': 'http://{host}/YamahaExtendedControl/v1/{zone}/set3dSurround?enable={enable}',
+        'SET_DIRECT': 'http://{host}/YamahaExtendedControl/v1/{zone}/setDirect?enable={enable}',
+        'SET_PURE_DIRECT': 'http://{host}/YamahaExtendedControl/v1/{zone}/setPureDirect?enable={enable}',
+        'SET_ENHANCER': 'http://{host}/YamahaExtendedControl/v1/{zone}/setEnhancer?enable={enable}',
+        'SET_TONE_CONTROL': 'http://{host}/YamahaExtendedControl/v1/{zone}/setToneControl?mode={mode}&bass={bass}&treble={treble}',
+        'SET_EQUALIZER': 'http://{host}/YamahaExtendedControl/v1/{zone}/setEqualizer?mode={mode}&low={low}&mid={mid}&high={high}',
+        'SET_BALANCE': 'http://{host}/YamahaExtendedControl/v1/{zone}/setBalance?value={value}',
+        'SET_DIALOGUE_LEVEL': 'http://{host}/YamahaExtendedControl/v1/{zone}/setDialogueLevel?value={value}',
+        'SET_DIALOGUE_LIFT': 'http://{host}/YamahaExtendedControl/v1/{zone}/setDialogueLift?value={value}',
+        'SET_CLEAR_VOICE': 'http://{host}/YamahaExtendedControl/v1/{zone}/setClearVoice?enable={enable}',
+        'SET_SUBWOOFER_VOLUME': 'http://{host}/YamahaExtendedControl/v1/{zone}/setSubwooferVolume?volume={volume}',
+        'SET_BASS_EXTENSION': 'http://{host}/YamahaExtendedControl/v1/{zone}/setBassExtension?enable={enable}',
+        'GET_SIGNAL_INFO': 'http://{host}/YamahaExtendedControl/v1/main/getSignalInfo',
     }
     
     @staticmethod
@@ -296,6 +664,204 @@ class Zone():
         assert zone in ZONES, 'Invalid ZONE value!'
         return Zone.URI['PREPARE_INPUT_CHANGE'].format(host='{host}', zone=zone, input=input)
     # end-of-method prepare_input_change
+    
+    @staticmethod
+    def set_3d_surround(zone, enable):
+        """For setting 3D Surround status.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'  
+            enable -- Specifies 3D Surround status.
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_3D_SURROUND'].format(host='{host}', zone=zone, enable=enable)
+    # end-of-method set_3d_surround
+    
+    @staticmethod
+    def set_direct(zone, enable):
+        """For setting Direct status.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'  
+            enable -- Specifies Direct status.
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_DIRECT'].format(host='{host}', zone=zone, enable=enable)
+    # end-of-method set_direct
+    
+    @staticmethod
+    def set_pure_direct(zone, enable):
+        """For setting Pure Direct status.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'  
+            enable -- Specifies Pure Direct status.
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_PURE_DIRECT'].format(host='{host}', zone=zone, enable=enable)
+    # end-of-method set_pure_direct
+    
+    @staticmethod
+    def set_enhancer(zone, enable):
+        """For setting Enhancer status.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'  
+            enable -- Specifies Enhancer status.
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_ENHANCER'].format(host='{host}', zone=zone, enable=enable)
+    # end-of-method set_enhancer
+    
+    @staticmethod
+    def set_tone_control(zone, mode, bass, treble):
+        """For setting Tone Control in each Zone. Values of specifying range and steps are different.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            mode -- Specifies Mode setting. If no parameter is specified, current Mode
+                    setting is not changed.
+                    Regardless of the Mode setting, bass/treble setting can be changed,
+                    but valid only when Mode setting is "manual".
+            bass -- Specifies Bass value
+                    Values: Value range calculated by minimum/maximum/step values
+                    gotten via /system/getFeatures
+            treble -- Specifies Treble value
+                      Values: Value range calculated by minimum/maximum/step values
+                      gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_TONE_CONTROL'].format(host='{host}', zone=zone, mode=mode, bass=bass, treble=treble)
+    # end-of-method set_tone_control
+    
+    @staticmethod
+    def set_equalizer(zone, mode, low, mid, high):
+        """For setting Equalizer in each Zone. Values of specifying range and steps are different.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            mode -- Specifies Mode setting. If no parameter is specified, current Mode
+                    setting is not changed.
+                    Regardless of the Mode setting, low/mid/high setting can be
+                    changed, but valid only when Mode setting is "manual".
+                    Values: Values gotten via /system/getFeatures
+            low -- Specifies Low value
+                   Values: Value range calculated by minimum/maximum/step values
+                   gotten via /system/getFeatures
+            mid -- Specifies Mid value
+                   Values: Value range calculated by minimum/maximum/step values
+                   gotten via /system/getFeatures
+            high -- Specifies High value
+                    Values: Value range calculated by minimum/maximum/step values
+                    gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_EQUALIZER'].format(host='{host}', zone=zone, mode=mode, low=low, mid=mid, high=high)
+    # end-of-method set_equalizer
+    
+    @staticmethod
+    def set_balance(zone, value):
+        """For setting L/R Balance in each Zone's speaker. Values of specifying range and steps are different.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            value -- Specifies L/R Balance value. Negative values are for left side,
+                     positive values are for right side balance.
+                     Values: Value range calculated by minimum/maximum/step values
+                     gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_BALANCE'].format(host='{host}', zone=zone, value=value)
+    # end-of-method set_balance
+    
+    @staticmethod
+    def set_dialogue_level(zone, value):
+        """For setting Dialogue Level in each Zone. Values of specifying range and steps are different.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            value -- Specifies Dialogue Level value
+                     Values: Value range calculated by minimum/maximum/step values
+                     gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_DIALOGUE_LEVEL'].format(host='{host}', zone=zone, value=value)        
+    # end-of-method set_dialogue_level
+    
+    @staticmethod
+    def set_dialogue_lift(zone, value):
+        """For setting Dialogue Lift in each Zone. Values of specifying range and steps are different.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            value -- Specifies Dialogue Lift value
+                     Values: Value range calculated by minimum/maximum/step values
+                     gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_DIALOGUE_LIFT'].format(host='{host}', zone=zone, value=value)
+    # end-of-method set_dialogue_lift
+    
+    @staticmethod
+    def set_clear_voice(zone, value):
+        """For setting Clear Voice in each Zone.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            value -- Specifies Clear Voice setting
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_CLEAR_VOICE'].format(host='{host}', zone=zone, value=value)
+    # end-of-method set_clear_voice
+        
+    @staticmethod
+    def set_subwoofer_volume(zone, volume):
+        """For setting Subwoofer Volume in each Zone.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            volume -- Specifies volume value
+                      Values: Value range calculated by minimum/maximum/step values
+                      gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_SUBWOOFER_VOLUME'].format(host='{host}', zone=zone, volume=volume)
+    # end-of-method set_clear_voice        
+    
+    @staticmethod
+    def set_bass_extension(zone, enable):
+        """For setting Bass Extension in each Zone.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            enable -- Specifies Bass Extension setting
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone, enable=enable)    
+    # end-of-method set_bass_extension
+    
+    def get_signal_info(zone):
+        """For retrieving current playback signal information in each Zone.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone)  
+    # end-of-method get_signal_info
     
     pass
 # end-of-class Zone    
