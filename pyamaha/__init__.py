@@ -518,7 +518,7 @@ class  NetUSB():
                     Values: 'select', 'play', 'return'
         """
         assert type in TYPE, 'Invalid TYPE value!'
-        assert zone in ZONE, 'Invalid ZONE value!'
+        assert zone in ZONES, 'Invalid ZONE value!'
         return NetUSB.URI['SET_LIST_CONTROL'].format(host='{host}', list_id=list_id, type=type, index=index, zone=zone)
     # end-of-method set_list_control        
     
@@ -537,7 +537,7 @@ class  NetUSB():
             num -- Specifies Preset number.
                    Value: one in the range gotten via /system/getFeatures
         """
-        assert zone in ZONE, 'Invalid ZONE value!'
+        assert zone in ZONES, 'Invalid ZONE value!'
         return NetUSB.URI['RECALL_PRESET'].format(host='{host}', zone=zone, num=num)
     # end-of-method recall_preset
     
