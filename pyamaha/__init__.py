@@ -93,6 +93,10 @@ class Device():
 # end-of-class Device    
 
 
+class Dist():
+    pass
+# end-of-class Dist
+
 class System():
     """System commands."""
     
@@ -528,6 +532,8 @@ class Zone():
         'SET_SUBWOOFER_VOLUME': 'http://{host}/YamahaExtendedControl/v1/{zone}/setSubwooferVolume?volume={volume}',
         'SET_BASS_EXTENSION': 'http://{host}/YamahaExtendedControl/v1/{zone}/setBassExtension?enable={enable}',
         'GET_SIGNAL_INFO': 'http://{host}/YamahaExtendedControl/v1/main/getSignalInfo',
+        'SET_LINK_CONTROL': 'http://{host}/YamahaExtendedControl/v1/{zone}/setLinkControl?control={control}',
+        'SET_LINK_AUDIO_DELAY': 'http://{host}/YamahaExtendedControl/v1/{zone}/setLinkAudioDelay?delay={delay}'
     }
     
     @staticmethod
@@ -852,6 +858,7 @@ class Zone():
         return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone, enable=enable)    
     # end-of-method set_bass_extension
     
+    @staticmethod
     def get_signal_info(zone):
         """For retrieving current playback signal information in each Zone.
         
@@ -862,6 +869,35 @@ class Zone():
         assert zone in ZONES, 'Invalid ZONE value!'
         return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone)  
     # end-of-method get_signal_info
+    
+    @staticmethod
+    def set_link_control(zone, control):
+        """For setting Link Control in each Zone.
+        
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            control -- Specifies Link Control setting
+                       Values: Values gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_LINK_CONTROL'].format(host='{host}', zone=zone, control=control)
+    # end-of-method set_link_control
+    
+    @staticmethod
+    def set_link_audio_delay(zone, delay):
+        """For setting Link Audio Delay in each Zone. This setting is invalid when Link Control setting is
+           "Stability Boost".
+           
+        Arguments:
+            zone -- Specifies target Zone.
+                    Values: 'main', 'zone2', 'zone3', 'zone4'
+            delay -- Specifies Link Audio Delay setting
+                     Values: Values gotten via /system/getFeatures
+        """
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['SET_LINK_AUDIO_DELAY'].format(host='{host}', zone=zone, delay=delay)
+    # end-of-method set_link_audio_delay
     
     pass
 # end-of-class Zone    
