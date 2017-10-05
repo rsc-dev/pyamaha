@@ -540,37 +540,37 @@ yxc\system>
         <td colspan="4">DIST</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/getDistributionInfo</td>
+    <td>/YamahaExtendedControl/v1/dist/getDistributionInfo</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/setServerInfo</td>
+    <td>/YamahaExtendedControl/v1/dist/setServerInfo</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/setClientInfo</td>
+    <td>/YamahaExtendedControl/v1/dist/setClientInfo</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/startDistribution?num=<num></td>
+    <td>/YamahaExtendedControl/v1/dist/startDistribution</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/stopDistribution</td>
+    <td>/YamahaExtendedControl/v1/dist/stopDistribution</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
 </tr>
 <tr>
-    <td>}/YamahaExtendedControl/v1/dist/setGroupName</td>
+    <td>/YamahaExtendedControl/v1/dist/setGroupName</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
