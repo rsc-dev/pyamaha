@@ -68,10 +68,17 @@ class Device():
     # end-of-method __init__
     
     def request(self, *args):
+        """Request YamahaExtendedControl API URI.
+        
+        Arguments:
+            args -- URI link for GET or tupple (URI, data) for POST.
+        """
+        
+        # If it is only a URI, send GET...
         if isinstance(args[0], str):
             return self.get(args[0])
         else:
-            # it will be a tupple, send POST
+            # ...otherwise unpack tuple and send POST
             return self.post(*(args[0]))
     # end-of-method request
     
@@ -86,6 +93,12 @@ class Device():
     # end-of-method request    
     
     def post(self, uri, data):
+        """Send POST request. Returns response object.
+        
+        Arguments:
+            uri -- URI to send POST
+            data -- POST data
+        """
         r = requests.post(uri.format(host=self.ip), data=json.dumps(data))
         return r
     # end-of-method post    
