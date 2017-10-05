@@ -3,7 +3,7 @@
 __author__      = 'Radoslaw Matusiak'
 __copyright__   = 'Copyright (c) 2017 Radoslaw Matusiak'
 __license__     = 'MIT'
-__version__     = '0.2'
+__version__     = '0.3'
 
 import json
 import logging
@@ -71,6 +71,7 @@ class Device():
         if isinstance(args[0], str):
             return self.get(args[0])
         else:
+            # it will be a tupple, send POST
             return self.post(*(args[0]))
     # end-of-method request
     
@@ -94,8 +95,128 @@ class Device():
 
 
 class Dist():
+    """APIs in regard to Link distribution related setting and getting information."""
+    
+    URI = {
+        'GET_DISTRIBUTION_INFO': 'http://{host}/YamahaExtendedControl/v1/dist/getDistributionInfo',
+        'SET_SERVER_INFO': 'http://{host}/YamahaExtendedControl/v1/dist/setServerInfo',
+        'SET_CLIENT_INFO': 'http://{host}/YamahaExtendedControl/v1/dist/setClientInfo',
+        'START_DISTRIBUTION': 'http://{host}/YamahaExtendedControl/v1/dist/startDistribution?num={num}',
+        'STOP_DISTRIBUTION': 'http://{host}/YamahaExtendedControl/v1/dist/stopDistribution',
+        'SET_GROUP_NAME': 'http://{host}/YamahaExtendedControl/v1/dist/setGroupName',
+    }
+    
+    @staticmethod
+    def get_distribution_info():
+        """For retrieving a Device information related to Link distribution.
+        """
+        return Dist.URI['GET_DISTRIBUTION_INFO']
+    # end-of-method get_distribution_info
+    
+    @staticmethod
+    def set_server_info(group_id, zone=None, type=None, client_list=None):
+        """For setting a Link distribution server (Link master).
+        
+        Arguments:
+            group_id -- Specify Group ID in 32-digit hex.
+                        Specify "" (empty text) here to cancel a Device being the Link
+                        distribution server. Group ID will be initialized ("000...")
+                        after the cancel operation.
+            zone -- Specifies which target Zone ID to be the Link distribution
+                    server. If nothing is specified, current setting is kept. Zone
+                    ID to be the Link distribution server is confirmable using
+                    system/getFeatures server_zone_list.
+                    Values: "main" / "zone2" / "zone3" / "zone4"
+            type -- Specifies a type of adding or removing clients. Not necessary
+                    to specify when canceling the Link master status.
+                    Values: "add" / "remove"
+            client_list -- Specifies IP addresses of adding/removing clients. Specifiable
+                           up to 9 clients
+        """
+        data = {}
+        
+        data['group_id'] = group_id
+        
+        if zone is not None:
+            data['zone'] = zone
+            
+        if type is not None:
+            data['type'] = type
+            
+        if client_list is not None:
+            data['client_list'] = client_list
+            
+        return Dist.URI['SET_SERVER_INFO'], data
+    # end-of-method set_server_info
+    
+    @staticmethod
+    def set_client_info(group_id, zone=None, server_ip_address=None):
+        """For setting Link distributed clients. If a Device is already setup as Link distribution server, this
+           client setup is denied by that Device: use this API after canceling a Device's Link distribution
+           server setup using setServerInfo, then confirming that the target Device's role is changed to other
+           values than "server" using getDistributionInfo.
+           
+        Arguments:
+            group_id -- Specifies Group ID in 32-digit hex.
+                        Specify "" (empty text) here to cancel a Device being a Link
+                        distributed client. Group ID will be initialized ("000...") after
+                        the cancel operation.
+            zone -- Specifies which target Zone ID to be a Link distributed
+                    client. Not necessary to specify when cancelling a client status.
+                    Values: "main" / "zone2" / "zone3" / "zone4"
+            server_ip_address -- Specifies the IP Address of the Link distribution server.
+        """
+        data = {}
+        
+        data['group_id'] = group_id
+        
+        if zone is not None:
+            data['zone'] = zone
+        
+        if server_ip_address is not None:
+            data['server_ip_address'] = server_ip_address
+            
+        return Dist.URI['SET_CLIENT_INFO'], data
+    # end-of-method set_client_info
+    
+    @staticmethod
+    def start_distribution(num):
+        """For initiating Link distribution. 
+        This is valid to a Device that is setup as Link distribution server.
+        
+        Arguments:
+            num -- Specifies Link distribution number on current MusicCast Network.
+        """
+        return Dist.URI['START_DISTRIBUTION'].format(host='{host}', num=num)
+    # end-of-method start_distribution
+    
+    @staticmethod
+    def stop_distribution():
+        """For quitting Link distribution. 
+        This is valid to a Device that is setup as Link distribution server.
+        """
+        return Dist.URI['STOP_DISTRIBUTION']
+    # end-of-method stop_distribution
+    
+    @staticmethod
+    def set_group_name(name):
+        """For setting up Group Name. 
+        Note that Group Name is reserved in volatile memory.
+        
+        Arguments:
+            name -- Specifies Group Name. Use UTF-8 within 128 bytes. Default name
+                    would be used if it's not setup or "" (empty text) is specified.
+        """
+        data = {}
+        
+        data['name'] = name
+        
+        return Dist.URI['SET_GROUP_NAME'], data
+    # end-of-method set_group_name
+    
     pass
 # end-of-class Dist
+
 
 class System():
     """System commands."""
@@ -140,21 +261,21 @@ class System():
         """For retrieving basic information of a Device.
         """
         return System.URI['GET_DEVICE_INFO']
-    # end-of-method
+    # end-of-method get_device_info
 
     @staticmethod
     def get_features():
         """For retrieving feature information equipped with a Device.
         """
         return System.URI['GET_FEATURES']
-    # end-of-method
+    # end-of-method get_features
 
     @staticmethod
     def get_network_status():
         """For retrieving network related setup/information.
         """
         return System.URI['GET_NETWORK_STATUS']
-    # end-of-method
+    # end-of-method get_network_status
 
     @staticmethod
     def get_func_status():
@@ -162,7 +283,7 @@ class System():
         Parameters are readable only when corresponding functions are available in "func_list" of /system/getFeatures.
         """
         return System.URI['GET_FUNC_STATUS']
-    # end-of-method
+    # end-of-method get_func_status
 
     @staticmethod
     def set_autopower_standby(enable=True):
@@ -173,14 +294,14 @@ class System():
         enable -- Specifies Auto Power Standby status.
         """
         return System.URI['SET_AUTOPOWER_STANDBY'].format(host='{host}', enable=enable)
-    # end-of-method
+    # end-of-method set_autopower_standby
 
     @staticmethod
     def get_location_info():
         """For retrieving Location information.
         """
         return System.URI['GET_LOCATION_INFO']
-    # end-of-method
+    # end-of-method get_location_info
 
     @staticmethod
     def send_ir_code(code):
@@ -192,7 +313,7 @@ class System():
         code -- Specifies IR code in 8-digit hex.
         """
         return System.URI['SEND_IR_CODE'].format(host='{host}', code=code)
-    # end-of-method
+    # end-of-method send_ir_code
 
     @staticmethod
     def set_wired_lan(dhcp=None, ip_address=None, subnet_mask=None, default_gateway=None, dns_server_1=None, dns_server_2=None):
