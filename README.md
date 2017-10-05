@@ -382,7 +382,19 @@ yxc\system>
         <td>x</td>
         <td>-</td>
         <td>Documented</td>
-    </tr>    
+    </tr>   
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setLinkControl</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/{zone}/setLinkAudioDelay</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>      
 <tr><td colspan="4">TUNER</td></tr>
 <tr>
 <td>/YamahaExtendedControl/v1/tuner/getPresetInfo</td>
