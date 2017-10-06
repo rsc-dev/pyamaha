@@ -1387,6 +1387,33 @@ class CD():
     
     pass
 # end-of-class CD
+
+
+class Debug():
+    """Undocumented Debug commands.
+    """
+
+    URI = {
+        'GET_DIAG_INFO': 'http://{host}/YamahaExtendedControl/v1/debug/getDiagInfo',
+        'GET_STATUS': 'http://{host}/YamahaExtendedControl/v1/debug/getStatus'
+    }
+    
+    @staticmethod
+    def get_diag_info():
+        """None.
+        """
+        return Debug.URI['GET_DIAG_INFO']
+    # end-of-method get_diag_info
+    
+    @staticmethod
+    def get_status():
+        """None.
+        """
+        return Debug.URI['GET_STATUS']
+    # end-of-method get_status
+    
+    pass
+# end-of-class Debug
     
 
 if __name__ == '__main__':
