@@ -1,5 +1,6 @@
 # PYAMAHA
 
+[![PyPI](https://img.shields.io/pypi/v/pyamaha.svg)](https://pypi.python.org/pypi/pyamaha)
 [![Join the chat at https://gitter.im/rsc-dev/pyamaha](https://badges.gitter.im/rsc-dev/pyamaha.svg)](https://gitter.im/rsc-dev/pyamaha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## About
