@@ -20,7 +20,7 @@ def device_decorator(func):
         if DEV is not None:
             func(*args, **kwargs)
         else:
-            print '[!] Please set device ip with "device" command.'
+            print('[!] Please set device ip with "device" command.')
     return func_wrapper
 # end-of-function
     
