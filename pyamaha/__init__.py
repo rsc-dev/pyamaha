@@ -306,7 +306,7 @@ class System():
         Arguments:
         enable -- Specifies Auto Power Standby status.
         """
-        return System.URI['SET_AUTOPOWER_STANDBY'].format(host='{host}', enable=enable)
+        return System.URI['SET_AUTOPOWER_STANDBY'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_autopower_standby
 
     @staticmethod
@@ -512,13 +512,13 @@ class System():
     @staticmethod
     def set_bluetooth_standby(enable=True):
         """For setting Bluetooth Standby"""
-        return System.URI['SET_BLUETOOTH_STANDBY'].format(host='{host}', enable=enable)
+        return System.URI['SET_BLUETOOTH_STANDBY'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_bluetooth_standby
     
     @staticmethod
     def set_bluetooth_tx_setting(enable=True):
         """For setting Bluetooth transmission"""
-        return System.URI['SET_BLUETOOTH_TX_SETTING'].format(host='{host}', enable=enable)
+        return System.URI['SET_BLUETOOTH_TX_SETTING'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_bluetooth_tx_setting
 
     @staticmethod
@@ -562,13 +562,13 @@ class System():
     @staticmethod
     def set_speaker_a(enable=True):
         """For setting Speaker A status"""
-        return System.URI['SET_SPEAKER_A'].format(host='{host}', enable=enable)
+        return System.URI['SET_SPEAKER_A'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_speaker_a
     
     @staticmethod
     def set_speaker_b(enable=True):
         """For setting Speaker A status"""
-        return System.URI['SET_SPEAKER_B'].format(host='{host}', enable=enable)
+        return System.URI['SET_SPEAKER_B'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_speaker_b
     
     @staticmethod
@@ -589,19 +589,19 @@ class System():
     @staticmethod
     def set_zone_b_volume_sync(enable):
         """For setting Zone B volume sync."""
-        return System.URI['SET_ZONE_B_VOLUME_SYNC'].format(host='{host}', enable=enable)
+        return System.URI['SET_ZONE_B_VOLUME_SYNC'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_zone_b_volume_sync
     
     @staticmethod
     def set_hdmi_out_1(enable):
         """set_hdmi_out_1."""
-        return System.URI['SET_HDMI_OUT_1'].format(host='{host}', enable=enable)
+        return System.URI['SET_HDMI_OUT_1'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_hdmi_out_1
     
     @staticmethod
     def set_hdmi_out_2(enable):
         """set_hdmi_out_1."""
-        return System.URI['SET_HDMI_OUT_2'].format(host='{host}', enable=enable)
+        return System.URI['SET_HDMI_OUT_2'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_hdmi_out_2
     
     @staticmethod
@@ -757,7 +757,7 @@ class Zone():
             enable -- Specifying mute status. Default: True.
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_MUTE'].format(host='{host}', zone=zone, enable=enable)
+        return Zone.URI['SET_MUTE'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_mute
     
     @staticmethod
@@ -815,7 +815,7 @@ class Zone():
             enable -- Specifies 3D Surround status.
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_3D_SURROUND'].format(host='{host}', zone=zone, enable=enable)
+        return Zone.URI['SET_3D_SURROUND'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_3d_surround
     
     @staticmethod
@@ -828,7 +828,7 @@ class Zone():
             enable -- Specifies Direct status.
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_DIRECT'].format(host='{host}', zone=zone, enable=enable)
+        return Zone.URI['SET_DIRECT'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_direct
     
     @staticmethod
@@ -841,7 +841,7 @@ class Zone():
             enable -- Specifies Pure Direct status.
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_PURE_DIRECT'].format(host='{host}', zone=zone, enable=enable)
+        return Zone.URI['SET_PURE_DIRECT'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_pure_direct
     
     @staticmethod
@@ -854,7 +854,7 @@ class Zone():
             enable -- Specifies Enhancer status.
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_ENHANCER'].format(host='{host}', zone=zone, enable=enable)
+        return Zone.URI['SET_ENHANCER'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_enhancer
     
     @staticmethod
@@ -989,7 +989,7 @@ class Zone():
             enable -- Specifies Bass Extension setting
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone, enable=enable)    
+        return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone, enable=_bool_to_str(enable))
     # end-of-method set_bass_extension
     
     @staticmethod
@@ -1414,7 +1414,9 @@ class Debug():
     
     pass
 # end-of-class Debug
-    
+
+def _bool_to_str(value):
+    return str(value).lower()
 
 if __name__ == '__main__':
     pass
