@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 setup(
   name = 'pyamaha',
   packages = ['pyamaha'],
@@ -21,4 +21,6 @@ setup(
   install_requires=[
     'requests',
   ],
+  setup_requires=["pytest-runner"],
+  tests_require=["pytest"],
 )
