@@ -25,7 +25,7 @@ from pyamaha import Device, System
 dev = Device('192.168.1.1')
 res = dev.request(System.get_device_info())
 
-print res.json() # JSON response
+print(res.json()) # JSON response
 ```
 
 ### CLI
