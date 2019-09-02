@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pyamaha.svg)](https://pypi.python.org/pypi/pyamaha)
 [![Join the chat at https://gitter.im/rsc-dev/pyamaha](https://badges.gitter.im/rsc-dev/pyamaha.svg)](https://gitter.im/rsc-dev/pyamaha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/rsc-dev/pyamaha.svg?branch=master)](https://travis-ci.org/rsc-dev/pyamaha)
 
 ## About
 Pyamaha is Python implementation of [Yamaha Extended Control API Specification](https://github.com/rsc-dev/pyamaha/blob/master/doc/YXC_API_Spec_Basic.pdf).
@@ -128,7 +129,7 @@ yxc\system>
         <td>x</td>
         <td>-</td>
         <td>Documented</td>
-    </tr> 
+    </tr>
     <tr>
         <td>/YamahaExtendedControl/v1/system/setAirPlayPin</td>
         <td>x</td>
@@ -170,7 +171,7 @@ yxc\system>
         <td>x</td>
         <td>-</td>
         <td>Documented</td>
-    </tr> 
+    </tr>
     <tr>
         <td>/YamahaExtendedControl/v1/system/setBluetoothTxSetting</td>
         <td>x</td>
@@ -230,7 +231,7 @@ yxc\system>
         <td>x</td>
         <td>-</td>
         <td>Documented</td>
-    </tr> 
+    </tr>
     <tr>
         <td>/YamahaExtendedControl/v1/system/setHdmiOut2</td>
         <td>x</td>
