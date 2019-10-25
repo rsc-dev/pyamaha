@@ -1070,7 +1070,7 @@ class Tuner():
     # end-of-method get_play_info
     
     @staticmethod
-    def set_freq(band, tunning, num):
+    def set_freq(band, tuning, num):
         """For setting Tuner frequency.
         
         Arguments:
@@ -1082,7 +1082,7 @@ class Tuner():
         """
         assert band in BAND, 'Invalid BAND value!'
         assert tuning in TUNING, 'Invalid TUNING value!'
-        return Tuner.URI['SET_FREQ'].fromat(host='{host}', band=band, tuning=tuning, num=num)
+        return Tuner.URI['SET_FREQ'].format(host='{host}', band=band, tuning=tuning, num=num)
     # end-of-method set_freq
     
     @staticmethod
@@ -1100,7 +1100,7 @@ class Tuner():
         """
         assert zone in ZONES, 'Invalid ZONE value!'
         assert band in PRESET_BAND, 'Invalid BAND value!'
-        return Tuner.URI['RECALL_PRESET'].fromat(host='{host}', zone=zone, band=band, num=num)
+        return Tuner.URI['RECALL_PRESET'].format(host='{host}', zone=zone, band=band, num=num)
     # end-of-method recall_preset
     
     @staticmethod
@@ -1127,7 +1127,7 @@ class Tuner():
             num -- Specifying a preset number.
                    Value: one in the range gotten via /system/getFeatures  
         """
-        return Tuner.URI['STORE_PRESET'].fromat(host='{host}', num=num)
+        return Tuner.URI['STORE_PRESET'].format(host='{host}', num=num)
     # end-of-method store_preset
     
     @staticmethod
