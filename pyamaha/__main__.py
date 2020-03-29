@@ -10,7 +10,7 @@ import pprint
 import sys
 from functools import wraps
 
-from pyamaha import Device, System
+from pyamaha import Device, System, Zone
 
 DEV = None
 
@@ -180,6 +180,37 @@ class SystemCli(cmd.Cmd, BaseCmds):
     pass
 # end-of-class System    
 
+class ZoneCli(cmd.Cmd, BaseCmds):
+    PROMPT = 'zone'
+    
+    def __init__(self, top):
+        cmd.Cmd.__init__(self)
+        self.prompt = '{}\{}>'.format(top, ZoneCli.PROMPT)
+    # end-of-method __init__
+
+    @device_decorator
+    def do_setPower(self, line):
+        """
+        For setting power status of each Zone.
+        If no parameter is specified: Default zone=main and power=toggle
+        
+        Usage: do_setPower [zone=<main|zone2|zone3|zoneN>] [power=<on|standby|toggle>] <enter>
+        Example: do_setPower zone=main power=on <enter>
+        """
+        data = {'zone':'main', 'power':'toggle'}
+
+        args = line.split()
+        for arg in args:
+            k, v = arg.split('=')
+            if k in data.keys():
+                data[k] = v
+
+        resp = DEV.request(Zone.set_power(**data))
+        pprint.pprint(resp.json())
+    # end-of-method do_setPower
+
+    pass
+# end-of-class Zone
 
 class RootCli(cmd.Cmd, BaseCmds):
     PROMPT = 'yxc'
@@ -198,6 +229,16 @@ class RootCli(cmd.Cmd, BaseCmds):
         system = SystemCli(RootCli.PROMPT)
         system.cmdloop()
     # end-of-method do_system
+
+    def do_zone(self, _):
+        """
+        Zone submenu.
+        
+        Usage: system <enter>
+        """
+        zone = ZoneCli(RootCli.PROMPT)
+        zone.cmdloop()
+    # end-of-method do_zone
     
     def do_back(self, _):
         """
