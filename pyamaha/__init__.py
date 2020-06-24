@@ -665,7 +665,7 @@ class Zone():
         'SET_CLEAR_VOICE': 'http://{host}/YamahaExtendedControl/v1/{zone}/setClearVoice?enable={enable}',
         'SET_SUBWOOFER_VOLUME': 'http://{host}/YamahaExtendedControl/v1/{zone}/setSubwooferVolume?volume={volume}',
         'SET_BASS_EXTENSION': 'http://{host}/YamahaExtendedControl/v1/{zone}/setBassExtension?enable={enable}',
-        'GET_SIGNAL_INFO': 'http://{host}/YamahaExtendedControl/v1/main/getSignalInfo',
+        'GET_SIGNAL_INFO': 'http://{host}/YamahaExtendedControl/v1/{zone}/getSignalInfo',
         'SET_LINK_CONTROL': 'http://{host}/YamahaExtendedControl/v1/{zone}/setLinkControl?control={control}',
         'SET_LINK_AUDIO_DELAY': 'http://{host}/YamahaExtendedControl/v1/{zone}/setLinkAudioDelay?delay={delay}'
     }
@@ -1001,7 +1001,7 @@ class Zone():
                     Values: 'main', 'zone2', 'zone3', 'zone4'
         """
         assert zone in ZONES, 'Invalid ZONE value!'
-        return Zone.URI['SET_BASS_EXTENSION'].format(host='{host}', zone=zone)  
+        return Zone.URI['GET_SIGNAL_INFO'].format(host='{host}', zone=zone)  
     # end-of-method get_signal_info
     
     @staticmethod
