@@ -23,4 +23,5 @@ setup(
   ],
   setup_requires=["pytest-runner"],
   tests_require=["pytest"],
+  extras_require={"async": ["aiohttp"]}
 )

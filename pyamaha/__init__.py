@@ -107,6 +107,63 @@ class Device():
 # end-of-class Device    
 
 
+class AsyncDevice():
+    """
+    Yamaha async device abstraction class.
+    """
+    
+    def __init__(self, client, ip):
+        """Ctor.
+        
+        Arguments:
+            client -- aiohttp client session.
+            ip -- Yamaha device IP.
+        """
+        self.client = client
+        self.ip = ip
+
+        from aiohttp import ClientConnectorError, ClientResponse, ClientSession
+
+    # end-of-method __init__
+    
+    async def request(self, *args):
+        """Request YamahaExtendedControl API URI.
+        
+        Arguments:
+            args -- URI link for GET or tupple (URI, data) for POST.
+        """
+        
+        # If it is only a URI, send GET...
+        if isinstance(args[0], str):
+            return await self.get(args[0])
+        else:
+            # ...otherwise unpack tuple and send POST
+            return await self.post(*(args[0]))
+    # end-of-method request
+    
+    async def get(self, uri):
+        """Request given URI. Returns response object.
+        
+        Arguments:
+            uri -- URI to request
+        """
+        return await self.client.get(uri.format(host=self.ip))
+    # end-of-method get    
+    
+    async def post(self, uri, data):
+        """Send POST request. Returns response object.
+        
+        Arguments:
+            uri -- URI to send POST
+            data -- POST data
+        """
+        return await self.client.post(uri.format(host=self.ip), data=json.dumps(data))
+    # end-of-method post    
+    
+    pass
+# end-of-class Device    
+
+
 class Dist():
     """APIs in regard to Link distribution related setting and getting information."""
     
