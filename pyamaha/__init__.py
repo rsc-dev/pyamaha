@@ -77,6 +77,8 @@ class BaseDevice():
         self._messages = queue.Queue()
         self._headers = {}
 
+        self._socket = None
+
         if handle_event:
             self._init_socket()
 
