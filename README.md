@@ -63,6 +63,26 @@ asyncio.run(main())
 
 ```
 
+### UDP Callbacks (see Chaper 10 in YXC documentation)
+
+```python
+import time
+
+from pyamaha import Device, System
+
+
+def handle(message):
+    print(message) # UDP event data (python dict)
+
+dev = Device('192.168.1.1')
+res = dev.request(System.get_device_info(), handle)
+
+print(res.json()) # JSON response
+
+time.sleep(60)
+```
+
+
 ### CLI
 ```sh
 > python -m pyamaha
