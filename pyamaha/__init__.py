@@ -8,6 +8,10 @@ __version__     = '0.3'
 import json
 import logging
 import requests
+import socket
+import threading
+import time
+import queue
 
 BAND = ['common', 'am', 'fm', 'dab']
 CD_PLAYBACK = ['play', 'stop', 'pause', 'previous', 'next', 'fast_reverse_start', 
@@ -52,19 +56,109 @@ RESPONSE_CODE = {
     112: 'Access Denied'
 }
 
+_LOGGER = logging.getLogger(__name__)
 
-class Device():
+
+class BaseDevice():
     """
     Yamaha device abstraction class.
     """
-    
-    def __init__(self, ip):
+
+    def __init__(self, ip, handle_event=None):
         """Ctor.
         
         Arguments:
             ip -- Yamaha device IP.
+            handle_event -- callback function with one parameter (the message).
         """
         self.ip = ip
+        self.handle_event = handle_event
+
+        self._messages = queue.Queue()
+        self._headers = {}
+
+        self._socket = None
+
+        if handle_event:
+            self._init_socket()
+
+    def _init_socket(self):
+        try:
+            self._socket = socket.socket(
+                socket.AF_INET,     # IPv4
+                socket.SOCK_DGRAM   # UDP
+            )
+            self._socket.bind(('', 0))
+            self._udp_port = self._socket.getsockname()[1]
+        except socket.error as err:
+            raise err
+        else:
+            socket_thread = threading.Thread(
+                name="SocketThread", target=self._socket_worker)
+            socket_thread.setDaemon(True)
+            socket_thread.start()
+
+            worker_thread = threading.Thread(
+                name="WorkerThread", target=self._message_worker)
+            worker_thread.setDaemon(True)
+            worker_thread.start()
+
+            self._headers.update({
+                "X-AppName": "MusicCast/1.0",
+                "X-AppPort": str(self._udp_port)
+            })
+
+    def _message_worker(self):
+        """Loop through messages and pass them on to right device"""
+        _LOGGER.debug("Starting Worker Thread.")
+
+        while True:
+
+            if not self._messages.empty():
+                message = self._messages.get()
+
+                data = {}
+                try:
+                    data = json.loads(message.decode("utf-8"))
+                except ValueError:
+                    _LOGGER.error("Received invalid message: %s", message)
+
+                self.handle_event(data)
+                self._messages.task_done()
+
+            time.sleep(0.2)
+
+    def _socket_worker(self):
+        """Socket Loop that fills message queue"""
+        while True:
+            try:
+                data, addr = self._socket.recvfrom(1024)    # buffer size is 1024 bytes
+            except OSError as err:
+                _LOGGER.error(err)
+            else:
+                _LOGGER.debug("received message: %s from %s", data, addr)
+                self._messages.put(data)
+            time.sleep(0.2)
+
+    def __del__(self):
+        if self._socket:
+            _LOGGER.debug("Closing Socket.")
+            self._socket.close()
+
+
+class Device(BaseDevice):
+    """
+    Yamaha device abstraction class.
+    """
+    
+    def __init__(self, ip, handle_event=None):
+        """Ctor.
+        
+        Arguments:
+            ip -- Yamaha device IP.
+            handle_event -- callback function with one parameter (the message).
+        """
+        super().__init__(ip, handle_event)
     # end-of-method __init__
     
     def request(self, *args):
@@ -88,7 +182,7 @@ class Device():
         Arguments:
             uri -- URI to request
         """
-        r = requests.get(uri.format(host=self.ip))
+        r = requests.get(uri.format(host=self.ip), headers=self._headers)
         return r
     # end-of-method request    
     
@@ -99,7 +193,7 @@ class Device():
             uri -- URI to send POST
             data -- POST data
         """
-        r = requests.post(uri.format(host=self.ip), data=json.dumps(data))
+        r = requests.post(uri.format(host=self.ip), data=json.dumps(data), headers=self._headers)
         return r
     # end-of-method post    
     
@@ -107,21 +201,22 @@ class Device():
 # end-of-class Device    
 
 
-class AsyncDevice():
+class AsyncDevice(BaseDevice):
     """
     Yamaha async device abstraction class.
     """
     
-    def __init__(self, client, ip):
+    def __init__(self, client, ip, handle_event=None):
         """Ctor.
         
         Arguments:
             client -- aiohttp client session.
             ip -- Yamaha device IP.
+            handle_event -- callback function with one parameter (the message).
         """
+        super().__init__(ip, handle_event)
         self.client = client
-        self.ip = ip
-
+        
         from aiohttp import ClientConnectorError, ClientResponse, ClientSession
 
     # end-of-method __init__
@@ -147,7 +242,7 @@ class AsyncDevice():
         Arguments:
             uri -- URI to request
         """
-        return await self.client.get(uri.format(host=self.ip))
+        return await self.client.get(uri.format(host=self.ip), headers=self._headers)
     # end-of-method get    
     
     async def post(self, uri, data):
@@ -157,7 +252,7 @@ class AsyncDevice():
             uri -- URI to send POST
             data -- POST data
         """
-        return await self.client.post(uri.format(host=self.ip), data=json.dumps(data))
+        return await self.client.post(uri.format(host=self.ip), data=json.dumps(data), headers=self._headers)
     # end-of-method post    
     
     pass
