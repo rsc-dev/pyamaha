@@ -418,7 +418,9 @@ class System():
         'SET_HDMI_OUT_1': 'http://{host}/YamahaExtendedControl/v1/system/setHdmiOut1?enable={enable}',
         'SET_HDMI_OUT_2': 'http://{host}/YamahaExtendedControl/v1/system/setHdmiOut2?enable={enable}',
         'GET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/getNameText?id={id}',
-        'SET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/setNameText'
+        'SET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/setNameText',
+        'SET_PARTYMODE': 'http://{host}/YamahaExtendedControl/v1/system/setPartyMode?enable={enable}'
+
     }
 
     @staticmethod
@@ -787,6 +789,12 @@ class System():
         data = {'id': id, 'text': text}
         return System.URI['SET_NAME_TEXT'], data
     # end-of-method set_name_text
+
+    @staticmethod
+    def set_partymode(enable=True):
+        """For setting Party Mode"""
+        return System.URI['SET_PARTYMODE'].format(host='{host}', enable=_bool_to_str(enable))
+    # end-of-method set_partymode
         
     pass
 # end-of-class System
