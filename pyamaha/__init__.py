@@ -697,7 +697,12 @@ class System():
 
     @staticmethod
     def set_partymode(enable=True):
-        """For setting Party Mode"""
+        """For  setting Party  Mode. Available  only  when "party_mode" exists
+        in  system func_list  under /system/getFeatures
+
+        Arguments:
+        enable -- boolean
+        """
         return System.URI['SET_PARTYMODE'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_partymode
         
