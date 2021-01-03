@@ -324,6 +324,7 @@ class System():
         'SET_HDMI_OUT_2': 'http://{host}/YamahaExtendedControl/v1/system/setHdmiOut2?enable={enable}',
         'GET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/getNameText?id={id}',
         'SET_NAME_TEXT': 'http://{host}/YamahaExtendedControl/v1/system/setNameText',
+        'SET_SPEAKER_PATTERN': 'http://{host}/YamahaExtendedControl/v1/system/setSpeakerPattern?num={num}',
         'SET_PARTYMODE': 'http://{host}/YamahaExtendedControl/v1/system/setPartyMode?enable={enable}'
 
     }
@@ -705,6 +706,18 @@ class System():
         """
         return System.URI['SET_PARTYMODE'].format(host='{host}', enable=_bool_to_str(enable))
     # end-of-method set_partymode
+
+    @staticmethod
+    def set_speaker_pattern(num):
+        """For setting speaker of device. Available only when "speaker_pattern"
+        function exists in system func_list under /system/getFeatures.
+
+        Arguments:
+        num -- int Specifies Speaker pattern number. Values: speaker_pattern
+               number from /system/getFeatures
+        """
+        return System.URI['SET_SPEAKER_PATTERN'].format(host='{host}', num=num)
+    # end-of-method set_speaker_pattern
         
     pass
 # end-of-class System
