@@ -58,48 +58,55 @@ class Device():
     Yamaha device abstraction class.
     """
     
-    def __init__(self, ip):
+    def __init__(self, ip, timeout=None):
         """Ctor.
         
         Arguments:
             ip -- Yamaha device IP.
+            timeout -- Request timeout
         """
         self.ip = ip
+        self.timeout = timeout
     # end-of-method __init__
     
-    def request(self, *args):
+    def request(self, *args, timeout=None):
         """Request YamahaExtendedControl API URI.
         
         Arguments:
             args -- URI link for GET or tupple (URI, data) for POST.
+            timeout -- Request timeout
         """
         
         # If it is only a URI, send GET...
         if isinstance(args[0], str):
-            return self.get(args[0])
+            return self.get(args[0], timeout=timeout)
         else:
             # ...otherwise unpack tuple and send POST
-            return self.post(*(args[0]))
+            return self.post(*(args[0]), timeout=timeout)
     # end-of-method request
     
-    def get(self, uri):
+    def get(self, uri, timeout=None):
         """Request given URI. Returns response object.
         
         Arguments:
             uri -- URI to request
+            timeout -- Request timeout
         """
-        r = requests.get(uri.format(host=self.ip))
+        timeout = timeout if timeout else self.timeout
+        r = requests.get(uri.format(host=self.ip), timeout=timeout)
         return r
     # end-of-method request    
     
-    def post(self, uri, data):
+    def post(self, uri, data, timeout=None):
         """Send POST request. Returns response object.
         
         Arguments:
             uri -- URI to send POST
             data -- POST data
+            timeout -- Request timeout
         """
-        r = requests.post(uri.format(host=self.ip), data=json.dumps(data))
+        timeout = timeout if timeout else self.timeout
+        r = requests.post(uri.format(host=self.ip), data=json.dumps(data), timeout=timeout)
         return r
     # end-of-method post    
     
