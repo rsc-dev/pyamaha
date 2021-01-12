@@ -305,6 +305,18 @@ yxc\system>
         <td>Documented</td>
     </tr>
     <tr>
+        <td>/YamahaExtendedControl/v1/system/setSpeakerPattern</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
+        <td>/YamahaExtendedControl/v1/system/setPartyMode</td>
+        <td>x</td>
+        <td>-</td>
+        <td>Documented</td>
+    </tr>
+    <tr>
         <td colspan="4">ZONE</td>
     </tr>
     <tr>
