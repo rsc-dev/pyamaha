@@ -59,7 +59,7 @@ RESPONSE_CODE = {
 _LOGGER = logging.getLogger(__name__)
 
 
-class BaseDevice():
+class BaseDevice:
     """
     Yamaha device abstraction class.
     """
@@ -259,7 +259,7 @@ class AsyncDevice(BaseDevice):
 # end-of-class Device    
 
 
-class Dist():
+class Dist:
     """APIs in regard to Link distribution related setting and getting information."""
     
     URI = {
@@ -383,7 +383,7 @@ class Dist():
 # end-of-class Dist
 
 
-class System():
+class System:
     """System commands."""
     
     URI = {
@@ -818,7 +818,7 @@ class System():
 # end-of-class System
 
 
-class Zone():
+class Zone:
     """Zone commands."""
 
     URI = {
@@ -1215,7 +1215,7 @@ class Zone():
 # end-of-class Zone    
     
 
-class Tuner():
+class Tuner:
     """APIs in regard to Tuner setting and getting information.
     Target inputs: AM / FM / DAB"""
     
@@ -1324,7 +1324,7 @@ class Tuner():
 # end-of-class Tuner    
 
 
-class  NetUSB():
+class  NetUSB:
     """APIs in regard to Network/USB related setting and getting information
     Target Inputs: USB / Network related ones (Server / Net Radio / Pandora / Spotify / AirPlay etc.)"""
     
@@ -1515,7 +1515,7 @@ class  NetUSB():
 # end-of-class Network_USB
     
 
-class CD():
+class CD:
     """APIs in regard to CD setting and getting information."""
 
     URI = {
@@ -1526,11 +1526,13 @@ class CD():
         'TOGGLE_SHUFFLE': 'http://{host}/YamahaExtendedControl/v1/cd/toggleShuffle',
     }
 
+    @staticmethod
     def get_play_info():
         """For retrieving playback information of CD."""
         return CD.URI['GET_PLAY_INFO']
     # end-of-method get_play_info
 
+    @staticmethod
     def set_playback(playback):
         """For controlling playback status.
         
@@ -1548,16 +1550,19 @@ class CD():
         return CD.URI['SET_PLAYBACK'].format(host='{host}', playback=playback)
     # end-of-method set_playback
     
+    @staticmethod
     def toggle_tray():
         """For toggling CD tray Open/Close setting."""
         return CD.URI['TOGGLE_TRAY']
     # end-of-method toggle_tray
         
+    @staticmethod
     def toggle_repeat():
         """For toggling repeat setting. No direct / discrete setting commands available."""
         return CD.URI['TOGGLE_REPEAT']
     # end-of-method toggle_repeat
     
+    @staticmethod
     def toggle_shuffle():
         """For toggling shuffle setting. No direct / discrete setting commands available."""
         return CD.URI['TOGGLE_SHUFFLE']
@@ -1592,6 +1597,7 @@ class Debug():
     
     pass
 # end-of-class Debug
+
 
 def _bool_to_str(value):
     return str(value).lower()
