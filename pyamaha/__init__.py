@@ -7,6 +7,8 @@ __version__     = '0.3'
 
 import json
 import logging
+from datetime import datetime
+
 import requests
 import socket
 import threading
@@ -1324,7 +1326,7 @@ class Tuner:
 # end-of-class Tuner    
 
 
-class  NetUSB:
+class NetUSB:
     """APIs in regard to Network/USB related setting and getting information
     Target Inputs: USB / Network related ones (Server / Net Radio / Pandora / Spotify / AirPlay etc.)"""
     
@@ -1437,8 +1439,19 @@ class  NetUSB:
     # end-of-method set_list_control        
     
     @staticmethod
-    def set_search_string():
-        raise NotImplementedError()
+    def set_search_string(search_string, list_id=None, index=None):
+        assert isinstance(search_string, str), "search_string has to be a str"
+        payload = {'string': search_string}
+        if list_id is not None:
+            search_list_ids = ['main', 'auto_complete', 'search_artist', 'search_track']
+            assert list_id in search_list_ids, "list_id has to be one of the following " + str(search_list_ids)
+            payload['list_id'] = list_id
+        if index is not None:
+            assert isinstance(index, int), "index has to be an int"
+            payload['index'] = index
+
+        return NetUSB.URI['SET_SEARCH_STRING'], payload
+
     # end-of-method set_search_string
 
     @staticmethod
@@ -1510,7 +1523,7 @@ class  NetUSB:
         """
         return NetUSB.URI['GET_SERVICE_INFO'].format(host='{host}', input=input, type=type, timeout=timeout)
     # end-of-method switch_account
-    
+
     pass
 # end-of-class Network_USB
     
@@ -1599,8 +1612,102 @@ class Debug():
 # end-of-class Debug
 
 
+class Clock:
+    """APIs in regarding the clock/alarm setting and getting information."""
+
+    URI = {
+        'GET_CLOCK_SETTINGS': 'http://{host}/YamahaExtendedControl/v1/clock/getSettings',
+        'SET_AUTO_SYNC': 'http://{host}/YamahaExtendedControl/v1/clock/setAutoSync?enable={enable}',
+        'SET_DATE_AND_TIME': 'http://{host}/YamahaExtendedControl/v1/clock/setDateAndTime?date_time={date_time}',
+        'SET_CLOCK_FORMAT': 'http://{host}/YamahaExtendedControl/v1/clock/setClockFormat?format={format}',
+        'SET_ALARM_SETTINGS': 'http://{host}/YamahaExtendedControl/v1/clock/setAlarmSettings',
+    }
+
+    DAYS = ["oneday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+
+    @staticmethod
+    def get_clock_settings():
+        return Clock.URI['GET_CLOCK_SETTINGS']
+
+    @staticmethod
+    def set_auto_sync(enable=True):
+        assert isinstance(enable, bool)
+        return Clock.URI['SET_AUTO_SYNC'].format(host='{host}', enable=_bool_to_str(enable))
+
+    @staticmethod
+    def set_date_and_time(date_time: datetime):
+        assert isinstance(date_time, datetime), "date_time has to be datetime type"
+        dat_str = date_time.strftime('%y%m%d%H%M%S')
+        return Clock.URI['SET_DATE_AND_TIME'].format(host='{host}', date_time=dat_str)
+
+    @staticmethod
+    def set_clock_format(clock_format: int):
+        assert clock_format == 12 or clock_format == 24, "Only 12 and 24 are possible formats"
+        return Clock.URI['SET_CLOCK_FORMAT'].format(host='{host}', format=str(clock_format) + 'h')
+
+    @staticmethod
+    def set_alarm_settings(alarm_on, volume=None, fade_interval=None, fade_type=None, mode=None, repeat=None, day=None,
+                           enable=None, alarm_time=None, beep=None, playback_type=None,
+                           resume_input=None, preset_type=None, preset_num=None, preset_snooze=None):
+        assert isinstance(alarm_on, bool), "alarm_on has to be a boolean"
+        payload = {'alarm_on': alarm_on, 'detail': dict()}
+        if volume is not None:
+            assert isinstance(volume, int), "volume has to be an integer"
+            payload['volume'] = volume
+        if fade_interval is not None:
+            assert isinstance(fade_interval, int), "fade_interval has to be an integer"
+            payload['fade_interval'] = fade_interval
+        if fade_type is not None:
+            assert isinstance(fade_type, int), "fade_type has to be an integer"
+            payload['fade_type'] = fade_type
+        if mode is not None:
+            assert isinstance(mode, str), "mode has to be a str"
+            payload['mode'] = mode
+        if repeat is not None:
+            assert isinstance(repeat, bool), "repeat has to be a bool"
+            assert day == 'oneday', "repeat is only valid if day is oneday"
+            payload['repeat'] = repeat
+        if day is not None:
+            assert day in Clock.DAYS, "day has to be one of the following " + str(Clock.DAYS)
+            payload['detail']['day'] = day
+        if enable is not None:
+            assert isinstance(enable, bool), "enable has to be a bool"
+            payload['detail']['enable'] = enable
+        if alarm_time is not None:
+            assert isinstance(alarm_time, str), "time has to be a str"
+            payload['detail']['time'] = alarm_time
+        if beep is not None:
+            assert isinstance(beep, bool), "beep has to be a bool"
+            payload['detail']['beep'] = beep
+        if playback_type is not None:
+            assert playback_type in ['resume', 'preset'], "playback_type has to be resume or preset"
+            payload['detail']['playback_type'] = playback_type
+            if playback_type == 'resume':
+                payload['detail']['resume'] = dict()
+                if resume_input is not None:
+                    assert isinstance(resume_input, str), "resume_input has to be a str"
+                    payload['detail']['resume']['input'] = resume_input
+            else:
+                payload['detail']['preset'] = dict()
+                if preset_num is not None:
+                    assert isinstance(preset_num, int), "preset_num has to be an integer"
+                    payload['detail']['preset']['num'] = preset_num
+                if preset_type is not None:
+                    assert isinstance(preset_type, str), "preset_type has to be a str"
+                    payload['detail']['preset']['type'] = preset_type
+                if preset_snooze is not None:
+                    assert isinstance(preset_snooze, bool), "preset_snooze has to be a bool"
+                    payload['detail']['preset']['snooze'] = preset_snooze
+
+        if len(payload['detail']) == 0:
+            del payload['detail']
+        return Clock.URI['SET_ALARM_SETTINGS'], payload
+
+# end-of-class Clock
+
 def _bool_to_str(value):
     return str(value).lower()
+
 
 if __name__ == '__main__':
     pass
