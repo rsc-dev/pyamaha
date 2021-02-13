@@ -1440,6 +1440,25 @@ class NetUSB:
     
     @staticmethod
     def set_search_string(search_string, list_id=None, index=None):
+        """For setting search text.
+
+        Specifies string executing this API before select an element with its attribute being “Capable of Search” or
+        retrieve info about searching list(Pandora).
+
+        Arguments:
+                search_string -- Value to search for.
+                list_id -- Specifies list ID. If nothing specified, 'main' is chosen implicitly
+                           Values: 'main' (common for all Net/USB sources)
+                                   'auto_complete' (Pandora)
+                                   'search_artist' (Pandora)
+                                   'search_track' (Pandora)
+                index -- Specifies an element position in the list being selected
+                         (offset from the beginning of the list). Valid only when the list_id is "main".
+                         Specifies index an element with its attribute being "Capable of Search"
+                         Controls same as setListControl "select" are to work with the index an element specified.
+                         If no index is specified, non-actions of select
+                         Values : 0 ~ 64999
+        """
         assert isinstance(search_string, str), "search_string has to be a str"
         payload = {'string': search_string}
         if list_id is not None:
@@ -1627,21 +1646,53 @@ class Clock:
 
     @staticmethod
     def get_clock_settings():
+        """For retrieving setting related to Clock function.
+        """
         return Clock.URI['GET_CLOCK_SETTINGS']
 
     @staticmethod
     def set_auto_sync(enable=True):
+        """For setting clock time auto sync.
+
+        Available only when "date_and_time" exists in clock - func_list under /system/getFeatures.
+
+        Arguments:
+        enable -- Specifies whether or not clock auto sync is valid
+
+        """
         assert isinstance(enable, bool)
         return Clock.URI['SET_AUTO_SYNC'].format(host='{host}', enable=_bool_to_str(enable))
 
     @staticmethod
-    def set_date_and_time(date_time: datetime):
-        assert isinstance(date_time, datetime), "date_time has to be datetime type"
-        dat_str = date_time.strftime('%y%m%d%H%M%S')
+    def set_date_and_time(date_time: [datetime, str]):
+        """For setting date and clock time.
+
+        Available only when "date_and_time" exists in clock - func_list under /system/getFeatures.
+
+        Arguments:
+        date_time -- Specifies date and time set on device. Format is "YYMMDDhhmmss".
+                     Value : YY : 00 ~ 99 (Year / 2000 ~ 2099)
+                     MM : 01 ~ 12 (Month) DD : 01 ~ 31 (Day)
+                     hh : 00 ~ 23 (Hour) mm : 00 ~ 59 (Minute) ss : 00 ~ 59 (Second).
+                     Alternatively a python datetime object can be used.
+        """
+        if isinstance(date_time, datetime):
+            dat_str = date_time.strftime('%y%m%d%H%M%S')
+        else:
+            assert isinstance(date_time, str), "date_time has to be a str or datetime object."
+            dat_str = date_time
         return Clock.URI['SET_DATE_AND_TIME'].format(host='{host}', date_time=dat_str)
 
     @staticmethod
     def set_clock_format(clock_format: int):
+        """For setting format of time display.
+
+        Available only when " clock_format " exists in clock - func_list under /system/getFeatures.
+
+        Arguments:
+        format -- format of time display
+                  Values : 12 (12-hour notation) / 24 (24-hour notation)
+        """
         assert clock_format == 12 or clock_format == 24, "Only 12 and 24 are possible formats"
         return Clock.URI['SET_CLOCK_FORMAT'].format(host='{host}', format=str(clock_format) + 'h')
 
@@ -1649,6 +1700,40 @@ class Clock:
     def set_alarm_settings(alarm_on, volume=None, fade_interval=None, fade_type=None, mode=None, repeat=None, day=None,
                            enable=None, alarm_time=None, beep=None, playback_type=None,
                            resume_input=None, preset_type=None, preset_num=None, preset_snooze=None):
+        """For setting alarm function.
+
+        Arguments:
+        alarm_on -- Specifies alarm function status on/off
+        volume -- Specifies alarm volume value
+                  Vaule Range : calculated by minimum/maximum/step value gotten via /system/getFeatures "alarm_volume"
+        fade_interval -- Specifies alarm fade interval (unit in second)
+                         Vaule Range : calculated by minimum/maximum/step
+                         value gotten via /system/getFeatures "alarm_fade"
+        fade_type -- Specifies alarm fade type
+                     Value : 1 ~ fade_type_max ( value gotten via /system/getFeatures)
+        mode -- Specifies alarm mode
+                Value : one gotten via /system/getFeatures "alarm_mode_list"
+        repeat -- Specifies repeat setting. This parameter is valid only when alarm mode "oneday" is specified
+        day -- Specifies target date for alarm setting.
+               This parameter is specified certainly when set detail parameters.
+               Value : "oneday" / "sunday" / "monday" / "tuesday" / "wednesday " / "thursday" / "friday" / "saturday"
+        enable -- 対象日のアラーム設定の有効/無効を指定します。 --> WTF?
+        alarm_time -- Specifies alarm start-up time. Format is "hhmm" Values : hh : 00 ~ 23 (Hour) mm : 00 ~ 59 (Minute)
+        beep -- Specifies whether or not beep is valid.
+        playback_type -- Specifies playback type Value : "resume" / "preset"
+        resume_input -- Specifies target Input ID to playback for resume.
+                        No playback when "none" is specified.
+                        Values: Input IDs gotten via /system/getFeatures "alarm_input_list"
+                        This parameter is valid only when playback_type "resume" is specified.
+        preset_type -- Specifies preset type. Values: Type gotten via /system/getFeatures "alarm_preset_list".
+                       This parameter is valid only when playback_type "preset" is specified.
+        preset_num -- Specifies preset number. Selectable preset number in each preset type is
+                      readable in /system/getFeatures.
+                      This parameter is valid only when playback_type "preset" is specified.
+        preset_snooze -- Returns snooze setting. Available only when "snooze" exists in func_list
+                         under /system/getFeatures.
+                         This parameter is valid only when playback_type "preset" is specified.
+        """
         assert isinstance(alarm_on, bool), "alarm_on has to be a boolean"
         payload = {'alarm_on': alarm_on, 'detail': dict()}
         if volume is not None:
