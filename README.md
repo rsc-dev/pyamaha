@@ -551,7 +551,7 @@ yxc\system>
 </tr>
 <tr>
 <td>/YamahaExtendedControl/v1/netusb/setSearchString</td>
-<td>-</td>
+<td>x</td>
 <td>-</td>
 <td>Documented</td>
 </tr>
@@ -651,6 +651,39 @@ yxc\system>
 </tr>
 <tr>
     <td>/YamahaExtendedControl/v1/dist/setGroupName</td>
+    <td>x</td>
+    <td>-</td>
+    <td>Documented</td>
+</tr>
+<tr>
+        <td colspan="4">CLOCK</td>
+</tr>
+<tr>
+    <td>/YamahaExtendedControl/v1/clock/getSettings</td>
+    <td>x</td>
+    <td>-</td>
+    <td>Documented</td>
+</tr>
+<tr>
+    <td>/YamahaExtendedControl/v1/clock/setAutoSync</td>
+    <td>x</td>
+    <td>-</td>
+    <td>Documented</td>
+</tr>
+<tr>
+    <td>/YamahaExtendedControl/v1/clock/setDateAndTime</td>
+    <td>x</td>
+    <td>-</td>
+    <td>Documented</td>
+</tr>
+<tr>
+    <td>/YamahaExtendedControl/v1/clock/setClockFormat</td>
+    <td>x</td>
+    <td>-</td>
+    <td>Documented</td>
+</tr>
+<tr>
+    <td>/YamahaExtendedControl/v1/clock/setAlarmSettings</td>
     <td>x</td>
     <td>-</td>
     <td>Documented</td>
