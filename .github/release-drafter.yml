@@ -1,0 +1,38 @@
+name-template: $RESOLVED_VERSION
+tag-template: $RESOLVED_VERSION
+categories:
+  - title: ⚠️ Breaking Changes
+    label: breaking change
+  - title: 🚀 Features
+    label: feature
+  - title: 🐛 Bug Fixes
+    label: fix
+  - title: 🧰 Maintenance
+    label: chore
+  - title: ⬆️ Dependencies
+    label: dependencies
+  - title: 🔁 Continuous Integration
+    label: ci
+template: |
+  # Changelog
+  $CHANGES
+  ---
+  *Get it on PyPi:*
+  ```
+  pip install pyamaha==$RESOLVED_VERSION
+  ```
+  https://pypi.org/project/pyamaha/$RESOLVED_VERSION/
+version-resolver:
+  major:
+    labels:
+      - 'breaking change'
+  minor:
+    labels:
+      - 'feature'
+  patch:
+    labels:
+      - 'chore'
+      - 'dependencies'
+      - 'fix'
+      - 'ci'
+  default: patch
