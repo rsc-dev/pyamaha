@@ -218,11 +218,11 @@ class ZoneCli(cmd.Cmd, BaseCmds):
         Usage: do_getSceneInfo [zone=<main|zone2|zone3|zoneN>] <enter>
         Example: do_getSceneInfo zone=main <enter>
         """
-        data = {"zone": "main"}
+        data = {'zone':'main'}
 
         args = line.split()
         for arg in args:
-            k, v = arg.split("=")
+            k, v = arg.split('=')
             if k in data.keys():
                 data[k] = v
 
@@ -240,11 +240,11 @@ class ZoneCli(cmd.Cmd, BaseCmds):
         Usage: do_setScene [zone=<main|zone2|zone3|zoneN>] [scene=<1,2,..8>] <enter>
         Example: do_getSceneInfo zone=main scene=1 <enter>
         """
-        data = {"zone": "main", "scene": 1}
+        data = {'zone':'main', 'scene':1}
 
         args = line.split()
         for arg in args:
-            k, v = arg.split("=")
+            k, v = arg.split('=')
             if k in data.keys():
                 data[k] = v
 

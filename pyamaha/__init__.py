@@ -1217,20 +1217,20 @@ class Zone:
     # end-of-method set_link_audio_delay
 
     @staticmethod
-    def get_scene_info(zone="main"):
+    def get_scene_info(zone='main'):
         """For retrieving a list of Scenes
 
         Arguments:
             zone -- Specifies target Zone.
                     Values: 'main', 'zone2', 'zone3', 'zone4'
         """
-        assert zone in ZONES, "Invalid ZONE value!"
-        return Zone.URI["GET_SCENE_INFO"].format(host="{host}", zone=zone)
+        assert zone in ZONES, 'Invalid ZONE value!'
+        return Zone.URI['GET_SCENE_INFO'].format(host='{host}', zone=zone)
 
     # end-of-method get_scene_info
 
     @staticmethod
-    def set_scene(zone="main", scene=1):
+    def set_scene(zone='main', scene=1):
         """
         For setting the Scene for the specified Zone.
 
@@ -1241,9 +1241,9 @@ class Zone:
                      Values: 1-8
         """
         scene = int(scene)
-        assert zone in ZONES, "Invalid ZONE value!"
-        assert scene in SCENES, "Invalid SCENE value!"
-        return Zone.URI["SET_SCENE"].format(host="{host}", zone=zone, scene=scene)
+        assert zone in ZONES, 'Invalid ZONE value!'
+        assert scene in SCENES, 'Invalid SCENE value!'
+        return Zone.URI['SET_SCENE'].format(host='{host}', zone=zone, scene=scene)
 
     # end-of-method set_scene
 
