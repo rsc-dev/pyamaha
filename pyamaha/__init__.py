@@ -1224,12 +1224,12 @@ class Tuner:
     URI = {
         'GET_PRESET_INFO': 'http://{host}/YamahaExtendedControl/v1/tuner/getPresetInfo?band={band}',
         'GET_PLAY_INFO': 'http://{host}/YamahaExtendedControl/v1/tuner/getPlayInfo',
-		    'SET_BAND' : 'http://{host}/YamahaExtendedControl/v1/tuner/setBand?band={band}',
+        'SET_BAND' : 'http://{host}/YamahaExtendedControl/v1/tuner/setBand?band={band}',
         'SET_FREQ': 'http://{host}/YamahaExtendedControl/v1/tuner/setFreq?band={band}&tuning={tuning}&num={num}',
         'RECALL_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/recallPreset?zone={zone}&band={band}&num={num}',
         'SWITCH_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/switchPreset?dir={dir}',
         'STORE_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/storePreset?num={num}',
-		    'CLEAR_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/clearPreset?band={band}&num={num}',
+        'CLEAR_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/clearPreset?band={band}&num={num}',
         'SET_DAB_SERVICE': 'http://{host}/YamahaExtendedControl/v1/tuner/setDabService?dir={dir}',
     }
     
