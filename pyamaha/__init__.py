@@ -1258,10 +1258,12 @@ class Tuner:
     URI = {
         'GET_PRESET_INFO': 'http://{host}/YamahaExtendedControl/v1/tuner/getPresetInfo?band={band}',
         'GET_PLAY_INFO': 'http://{host}/YamahaExtendedControl/v1/tuner/getPlayInfo',
+        'SET_BAND' : 'http://{host}/YamahaExtendedControl/v1/tuner/setBand?band={band}',
         'SET_FREQ': 'http://{host}/YamahaExtendedControl/v1/tuner/setFreq?band={band}&tuning={tuning}&num={num}',
         'RECALL_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/recallPreset?zone={zone}&band={band}&num={num}',
         'SWITCH_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/switchPreset?dir={dir}',
         'STORE_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/storePreset?num={num}',
+        'CLEAR_PRESET': 'http://{host}/YamahaExtendedControl/v1/tuner/clearPreset?band={band}&num={num}',
         'SET_DAB_SERVICE': 'http://{host}/YamahaExtendedControl/v1/tuner/setDabService?dir={dir}',
     }
 
@@ -1282,6 +1284,17 @@ class Tuner:
         """For retrieving playback information of Tuner."""
         return Tuner.URI['GET_PLAY_INFO']
     # end-of-method get_play_info
+
+    @staticmethod
+    def set_band(band):
+        """For setting Tuner band.
+        
+        Arguments:
+            band -- Specifies Band. Values : 'am', 'fm', 'dab'
+        """
+        assert band in BAND, 'Invalid BAND value!'
+        return Tuner.URI['SET_BAND'].format(host='{host}', band=band)
+    # end-of-method set_freq
 
     @staticmethod
     def set_freq(band, tuning, num):
@@ -1343,6 +1356,20 @@ class Tuner:
         """
         return Tuner.URI['STORE_PRESET'].format(host='{host}', num=num)
     # end-of-method store_preset
+
+    @staticmethod
+    def clear_preset(band, num):
+        """For clearing Tuner preset.
+
+        Arguments:
+            band -- Specifies Band. Values depend on Preset Type gotten via /system/getFeatures
+					Values: "common" (common), "am" / "fm" / "dab" (separate)
+			num -- Specifies Preset number
+					Values: one in the range gotten via /system/getFeatures
+        """
+        assert band in PRESET_BAND, 'Invalid BAND value!'
+        return Tuner.URI['CLEAR_PRESET'].format(host='{host}', band=band, num=num)
+    # end-of-method clear_preset
 
     @staticmethod
     def set_dab_service(dir):
